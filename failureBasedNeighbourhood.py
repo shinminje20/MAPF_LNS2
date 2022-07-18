@@ -25,10 +25,13 @@ def deg(path):
         for secondPath in range(0, len(path), 1):
             if(path[firstPath] == path[secondPath]):
                 continue
-            for timestep in range(0, len(path[firstPath]), 1):
+            length = len(path[firstPath])
+            if (len(path[firstPath]) > len(path[secondPath])):
+                length = len(path[secondPath])
+            for timestep in range(0, length, 1):
                 if compare(path[firstPath][timestep], path[secondPath][timestep]):
                     deg += 1
-                    continue
+                    break
         degList.append(deg)
         deg = 0
     return degList
@@ -50,12 +53,39 @@ def findA1(degList):
 
 
 def makeUnion(list1, list2):
-    final_list = list(set(list1) | set(list2))
+    final_list = []
+    minLength = len(list1)
+    min = list1.copy()
+    max = list2.copy()
+    if (len(list1) > len(list2)):
+        minLength = len(list2)
+        min = list2
+        max = list1
+    temp = []
+    for i in range(0, minLength, 1):
+        if (min[i] in max):
+            final_list.append(min[i])
+            temp.append(min[i])
+    for i in temp:
+        max.remove(i)
+        min.remove(i)
+    if (min != None):
+        for x in min:
+            final_list.append(x)
+    if (max != None):
+        for j in max:
+            final_list.append(j)
     return final_list
+
+# return: remained path out of all path
 
 
 def difference(allPath, neighbour):
-    return list(set(allPath) - set(neighbour)) + list(set(neighbour) - set(allPath))
+    diff = allPath.copy()
+    for i in neighbour:
+        if (i in allPath):
+            allPath.remove(i)
+    return diff
 
 
 def whenVisit(path, goal):
@@ -106,14 +136,10 @@ def failure(path, n):
     print("As" + str(As))
     print("Ag" + str(Ag))
 
-    # union = makeUnion(As, Ag)
-    '''union 고치기 for 2 (2 dimentional list)'''
-    union = [[(1, 2), (3, 4), (5, 5)], [(3, 3), (3, 4), (3, 3)]]
-    # remain = difference(pathCopy, union)
-    '''union 고치기 for 2 (2 dimentional list)'''
-    remain = [[(1, 2), (2, 2), (3, 3)],
-              [(0, 0), (2, 2), (6, 6)],
-              ]
+    union = makeUnion(As, Ag)
+
+    remain = difference(pathCopy, union)
+
     if len(union) == 0:
         return neighbour
     elif len(union) < n-1:
@@ -129,9 +155,12 @@ def failure(path, n):
             neighbour.append(arr[random.randint(0, len(arr)-1)])
     else:
         if (len(As) == 0):
+            print("+=======")
+            print(len(As))
+            print(Ag)
+            print(neighbour)
             for x in range(0, n-1, 1):
                 neighbour.append(Ag[x])
-            ''' Ag 안에 n-1이 아닌 경우는?'''
         elif(len(Ag) >= n-1):
             visitTimeList = whenVisitList(As, a1[0])
             minIndex = visitTimeList.index(min(visitTimeList))
@@ -154,9 +183,4 @@ def failure(path, n):
 
 
 if __name__ == "__main__":
-    path = [[(1, 2), (2, 2), (3, 3)],
-            [(1, 2), (3, 4), (5, 5)],
-            [(0, 0), (2, 2), (6, 6)],
-            [(3, 3), (3, 4), (3, 3)]
-            ]
-    print(failure(path, 2))
+    print(failure(path2, 2))
