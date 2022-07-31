@@ -1,5 +1,4 @@
-
-def loadScenario(scenarioFile):
+def loadScen(scenarioFile, numAgents):
 	f = open('scen/' + scenarioFile + '.scen', 'r')
 	line = f.readline() #version text
 	line = f.readline() #first agent
@@ -22,17 +21,17 @@ def loadScenario(scenarioFile):
 	instanceMap = []
 	for i in range(mapHeight):
 		instanceMap.append(f2.readline().strip())
-
-
-
-	#print(tokens)
 	f2.close()
+
+	instanceAgents = []
+	instanceAgents.append((tokens[4], tokens[5], tokens[6], tokens[7]))
+	for i in range(2, numAgents):
+		tokens = f.readline().split()
+		if len(tokens) == 0:
+			break;
+		instanceAgents.append((tokens[4], tokens[5], tokens[6], tokens[7]))
 	f.close()
-
-
-loadScenario('Berlin_1_256-even-1')
-
-
+	return instanceMap, instanceAgents
 
 
 
