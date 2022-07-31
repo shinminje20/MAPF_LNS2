@@ -40,8 +40,12 @@ def collisionNeighbourhood(paths, N):
 		#random walk on connected component
 
 
-
-
+def priorityList(neighbourhood):
+	PPlist = []
+	while len(neighbourhood) > 0:
+		index = randrange(0, len(neighbourhood))
+		PPlist.append(neighbourhood.pop(index))
+	return PPlist
 
 
 
