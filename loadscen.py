@@ -1,5 +1,5 @@
 def loadScen(scenarioFile, numAgents):
-	f = open('scen/' + scenarioFile + '.scen', 'r')
+	f = open('scen/' + scenarioFile, 'r')
 	line = f.readline() #version text
 	line = f.readline() #first agent
 	tokens = line.split('\t') 
@@ -31,9 +31,10 @@ def loadScen(scenarioFile, numAgents):
 			break;
 		instanceAgents.append((tokens[4], tokens[5], tokens[6], tokens[7]))
 	f.close()
+	print(instanceAgents)
 	return instanceMap, instanceAgents
 
-
+#loadScen('Berlin_1_256-even-1.scen', 5)
 
 
 

@@ -21,8 +21,8 @@ def collisionNeighbourhood(paths, N):
 					if agent != agent2
 						adjlist[agent].append(agent2)
 
-	adjlistKeySet = list(adjlist.keys())	
 	#select random vertex and get it's connected component
+	adjlistKeySet = list(adjlist.keys())	
 	neighbourhood = [ adjlistKeySet[randrange(0, len(adjlistKeySet))] ]
 	index = 0
 	visited = {}
@@ -33,13 +33,11 @@ def collisionNeighbourhood(paths, N):
 				neighbourhood.append(nextVertex)
 				visited[nextVertex] = 1
 		index += 1
+
 	if len(neighbourhood) < N:
 		#random walk collisions fill
 	elif len(neighbourhood) > N:
-		#random walk connected component
-
-
-
+		#random walk on connected component
 
 
 
