@@ -122,13 +122,4 @@ def randomValidMove(currPos, instanceMap, width, height):
 	else:
 		return None
 
-def priorityList(neighbourhood):
-	PPlist = []
-	while len(neighbourhood) > 0:
-		index = randrange(0, len(neighbourhood))
-		PPlist.append(neighbourhood.pop(index))
-	return PPlist
-
-
-
 
