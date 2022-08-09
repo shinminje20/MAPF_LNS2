@@ -104,6 +104,25 @@ def whenVisitList(pathList, goal):
     return visitTimeList
 
 
+def makeVisitTimeWithPathDic(visitTimeList, As):
+    # sorted one
+    dic = {}
+    i = 0
+    for path in tuple(As):
+        dic[visitTimeList[i]] = tuple(path)
+        i += 1
+    sortedkeys = list(dic.keys())
+    sortedkeys.sort()
+
+    # print(dic)
+
+    sortedDic = {}
+    for w in sortedkeys:
+        sortedDic[w] = list(dic[w])
+
+    return sortedDic, sortedkeys
+
+
 # n=the number of neighbour
 # path, example. path = [   [(1,1),(2,2)], [(1,1),(2,2)] ...]
 def failure(path, n):
@@ -118,8 +137,6 @@ def failure(path, n):
     neighbour.append(a1)
     pathCopy.remove(a1)
 
-    print("a1" + str(a1))
-
     As = []
     a1Start = a1[0]  # start point of a1
     for eachAgent in pathCopy:
@@ -132,9 +149,6 @@ def failure(path, n):
         if (eachAgent2[len(eachAgent2)-1] in a1):
             Ag.append(eachAgent2)
             # pathCopy.remove(eachAgent)
-
-    print("As" + str(As))
-    print("Ag" + str(Ag))
 
     union = makeUnion(As, Ag)
 
@@ -155,10 +169,7 @@ def failure(path, n):
             neighbour.append(arr[random.randint(0, len(arr)-1)])
     else:
         if (len(As) == 0):
-            print("+=======")
-            print(len(As))
-            print(Ag)
-            print(neighbour)
+
             for x in range(0, n-1, 1):
                 neighbour.append(Ag[x])
         elif(len(Ag) >= n-1):
@@ -167,20 +178,18 @@ def failure(path, n):
             neighbour.append(As[minIndex])
             for x in range(0, n-2, 1):
                 neighbour.append(Ag[x])
-                '''랜덤으로 하라는데 그냥 순서대로 해도?'''
 
         else:
             visitTimeList = whenVisitList(As, a1[0])
+            sortedDic, sortedKeys = makeVisitTimeWithPathDic(visitTimeList, As)
             for v in range(0, len(Ag), 1):
                 neighbour.append(Ag[v])
             for g in range(0, n-1-len(Ag), 1):
-                minIndex = visitTimeList.index(min(visitTimeList))
-                neighbour.append(As[minIndex])
-                visitTimeList[minIndex] = 99999999999999999
-                ''' 다른방법 찾기'''
+                neighbour.append(sortedDic[sortedKeys[0]])
+                del sortedDic[sortedKeys[0]]
 
     return neighbour
 
 
 if __name__ == "__main__":
-    print(failure(path2, 2))
+    print("test")
