@@ -125,7 +125,7 @@ def makeVisitTimeWithPathDic(visitTimeList, As):
 
 # n=the number of neighbour
 # path, example. path = [   [(1,1),(2,2)], [(1,1),(2,2)] ...]
-def failure(path, n):
+def faulureNeighbourhood(path, n):
     pathCopy = path
 
     # add a1 to neighbour
