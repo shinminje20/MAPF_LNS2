@@ -7,9 +7,10 @@ import random
 # cp = the number of collision pair after replan
 
 
-def ALND(weight):
-    # use index to distiguish neighbourhood (0,1)
-    population = [0, 1]
+def ALNS(weight):
+    # use index to distiguish neighbourhood (0,1,2)
+    # index0: collision, index1: failure, index2: random
+    population = [0, 1, 2]
     return random.choices(population, weights=weight, k=1)[0]
 
 
@@ -21,31 +22,26 @@ def updateWeight(weight, r, cp1, cp2):
 
 if __name__ == "__main__":
 
-    # for a in range(0, 10, 1):
-
     # default value (weight of each neighbour and r)
-    weight = [1, 1]
+    weight = [1, 1, 1]
     r = 0.1
 
-    # index 0: collision, index 1: failure
-    selectedNeighbour = ALND(weight)
+    for a in range(0, 5, 1):
+        # selecting a way out of 3 neighbourhood search
+        selectedNeighbour = ALNS(weight)
 
-    # selecting neighbour...
+        # selelct agent for neigbhourhood
 
-    # find out collision pair, using deg function in failureBasedNeighbourhoodSearch
-    cp1 = 15
+        # find out collision pair before replanning in neighbourhood, using deg function in failureBasedNeighbourhoodSearch
+        cp1 = 10
 
-    # replanning...
+        # replanning...
 
-    # find out collision pair, using deg function in failureBasedNeighbourhoodSearch
-    cp2 = 4
+        # find out collision pair, using deg function in failureBasedNeighbourhoodSearch
+        cp2 = 5
 
-    weight[selectedNeighbour] = updateWeight(
-        weight[selectedNeighbour], r, cp1, cp2)
+        weight[selectedNeighbour] = updateWeight(
+            weight[selectedNeighbour], r, cp1, cp2)
 
-    '''
-    when we merge our code, code will be specified more.
-    '''
-
-    print(selectedNeighbour)
-    print(weight)
+        print(selectedNeighbour)
+        print(weight)
