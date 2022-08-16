@@ -34,7 +34,7 @@ def deg(path):
 
 # path: lists of paths for all agents
 # N : size of neighbourhoods
-def randomNeighbourhoods(paths, N):
+def randomNeighbourhood(paths, N):
     pathCopy = paths
     degList = deg(pathCopy)
     # print("degList" + str(degList))
