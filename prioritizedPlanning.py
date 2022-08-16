@@ -36,10 +36,11 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceAgents):
         add_constraints_from_path(soft_obstacles, agentPath)
         newPaths.append(agentPath)
 
-    for i in range(len(neighbourhood)):
-        paths[neighbourhood[i]] = newPaths[i]
+    #for i in range(len(neighbourhood)):
+    #    paths[neighbourhood[i]] = newPaths[i]
 
-    return paths
+    return newPaths
+    #newPaths[i] corresponds to agent at neighbourhood[i]
 
 
 def add_constraints_from_path(constraint_table, path):
@@ -47,8 +48,8 @@ def add_constraints_from_path(constraint_table, path):
     if path[0] not in constraint_table:
         constraint_table[path[0]] = []
     constraint_table[path[0]].heappush(0)
-    
-	for i in range(1, len(path)):
+
+    for i in range(1, len(path)):
         #add vertex constraint
         if path[i] not in constraint_table:
             constraint_table[path[i]] = []

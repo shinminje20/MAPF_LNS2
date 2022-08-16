@@ -1,5 +1,5 @@
-from collisionNeighbourhood import collisionNeighbourhood
-
+from collisionneighbourhood import *
+from prioritizedPlanning import *
 
 #collisionNeighbourhood(paths, N, width, height, instanceMap):
 
@@ -32,12 +32,16 @@ paths2 = [
 ]
 
 
-selectedNeighbourhood = collisionNeighbourhood(paths2, N, width, height, instanceMap)
-print(selectedNeighbourhood)
+#selectedNeighbourhood = collisionNeighbourhood(paths2, N, width, height, instanceMap)
+#print(selectedNeighbourhood)
 
-
-
-
+constraintTable = dict()
+add_constraints_from_path(constraintTable, paths[0])
+print(constraintTable)
+add_constraints_from_path(constraintTable, paths[1])
+print(constraintTable)
+add_constraints_from_path(constraintTable, paths[2])
+print(constraintTable)
 
 
 
