@@ -49,7 +49,7 @@ def randomNeighbourhoods(paths, N):
     neighbour = []
     i = 0
     while i < N:
-        randomIndex = random.randint(0, len(probList)-1)
+        randomIndex = probList[random.randint(0, len(probList)-1)]
         # print("randomIndex" + str(randomIndex))
         if (paths[randomIndex] in neighbour):
             # print("continue")
