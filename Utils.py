@@ -1,5 +1,5 @@
 import heapq
-
+import copy
 
 def get_sum_of_cost(paths):
     rst = 0
@@ -7,6 +7,20 @@ def get_sum_of_cost(paths):
         rst += len(path) - 1
     return rst
 
+def move(loc, dir):
+    directions = [(0, -1), (1, 0), (0,0), (0, 1), (-1, 0)]
+    return loc[0] + directions[dir][0], loc[1] + directions[dir][1]
+
+def get_neighbors(curr_loc, my_map):
+    next_locs = []
+    for dir in range(5):
+        next_loc = move(curr_loc, dir)
+        
+        # check is valid move
+        if not next_loc[0] < 0 or  next_loc[1] < 0 or  next_loc[0] > len(my_map) - 1 or  next_loc[1] > len(my_map[0]) - 1:
+            next_locs.append(next_loc)
+    
+    return next_locs
 
 def compute_heuristics(my_map, goal):
     # Use Dijkstra to build a shortest-path tree rooted at the goal location
@@ -84,7 +98,9 @@ def build_unsafe_intervals(soft_obstacles, hard_obstacles):
         low = None
         high = None
         
-        for time in times:
+        temp_times = copy(times)
+        while temp_times:
+            time = heapq.heappop(temp_times)
             
             if prev is None:
                 prev = time
@@ -112,7 +128,10 @@ def build_unsafe_intervals(soft_obstacles, hard_obstacles):
         low = None
         high = None
         
-        for time in times:
+        temp_times = copy(times)
+
+        while temp_times:
+            time = heapq.heappop(temp_times)
             
             if prev is None:
                 prev = time
@@ -156,7 +175,7 @@ def merge_intervals(A, B):
     
     return res
 
-def build_safe_interval_table(locations, soft_obstacles, hard_obstacles, goal_loc):
+def build_safe_interval_table(locations, soft_obstacles, hard_obstacles):
 
     soft_unsafe_intervals, hard_unsafe_intervals = build_unsafe_intervals(soft_obstacles, hard_obstacles)
 

@@ -2,32 +2,20 @@ import heapq
 from Utils import *
 # from LNS import *
 
-def move(loc, dir):
-    directions = [(0, -1), (1, 0), (0,0), (0, 1), (-1, 0)]
-    return loc[0] + directions[dir][0], loc[1] + directions[dir][1]
 
-def is_valid_move(next_loc):
+
+# def is_valid_move(next_loc):
     
-    if next_loc[0] < 0 or  next_loc[1] < 0 or  next_loc[0] > len(my_map) - 1 or  next_loc[1] > len(my_map[0]) - 1:
-        return False
-    return True
+#     if next_loc[0] < 0 or  next_loc[1] < 0 or  next_loc[0] > len(my_map) - 1 or  next_loc[1] > len(my_map[0]) - 1:
+#         return False
+#     return True
 
-def get_neighbors(curr_loc):
-    next_locs = []
-    for dir in range(5):
-        next_loc = move(curr_loc, dir)
-        
-        if is_valid_move(curr_loc, next_loc):
-            next_locs.append(next_loc)
-    
-    return next_locs
-
-def get_valid_nodes(curr_loc, low, high, safe_interval_table):
+def get_valid_nodes(my_map, curr_loc, low, high, safe_interval_table):
     
     valid_neighbors = []
 
     
-    neighbor_locations = get_neighbors(curr_loc)
+    neighbor_locations = get_neighbors(curr_loc, my_map)
     
     # Algorithm 2 line 2-3
     for next_loc in neighbor_locations:  
@@ -47,11 +35,11 @@ def get_identical_nodes(node, open_list, closed_list):
     
     identical_nodes = []
     
-    for open_node in open_list:
+    for (_, open_node) in open_list:
         if open_node['id'] == node['id'] and open_node['loc'] == node['loc'] and open_node['is_goal'] == node['is_goal']:
             identical_nodes.append(open_node)
 
-    for closed_node in closed_list:
+    for (_, closed_node) in closed_list:
         if closed_node['id'] == node['id'] and closed_node['loc'] == node['loc'] and closed_node['is_goal'] == node['is_goal']:
             identical_nodes.append(closed_node)
     
@@ -80,8 +68,9 @@ def insert_node(node, open_list, closed_list, h_values, soft_obstacle):
             return
         
         elif n_low <= i_low and c_val <= i_c_val:
-            #delete i_node from either open_list, closed_list 그러면 open/closed_list 를 dict 이나 다른 거로 해야대나..
-            pass
+            #delete i_node from either open_list, closed_list
+            closed_list = [ x for x in closed_list if x[1] == i_node ]
+
         elif n_low < i_high and i_low < n_high:
             if n_low < i_low:
                 n_high = i_low
@@ -95,7 +84,7 @@ def pop_node(open_list):
     return curr
 
 
-def expand_node(curr_node, open_list, closed_list, safe_interval_table, hard_obstacle, soft_obstacle, h_values):
+def expand_node(my_map, curr_node, open_list, closed_list, safe_interval_table, hard_obstacle, soft_obstacle, h_values):
     
     valid_neighbors = []
     curr_loc = curr_node['loc']
@@ -135,22 +124,41 @@ def expand_node(curr_node, open_list, closed_list, safe_interval_table, hard_obs
                 'id': interval_id, 'is_goal': False, 'parent': curr_node}
             insert_node(n1, open_list, closed_list, h_values, soft_obstacle)
 
+def is_contain_obstacle(node_loc, interval, soft_obstacle):
+    
+    if node_loc in soft_obstacle:
+        temp_times = copy(soft_obstacle[node_loc])
 
-        
+        while temp_times:
+            time = heapq.heappop(temp_times)
+            if interval[0] <= time and time < interval[1]:
+                return True
+    
+    return False
 
+def is_contain_edge(parent_loc, node_loc, n_low, soft_obstacle):
 
-# def is_soft_constrainted(node):
-#     if soft_obstacle.has_key(node['interval']):
+    if (parent_loc, node_loc) in soft_obstacle:
+
+        temp_times = copy(soft_obstacle[(parent_loc, node_loc)])
+
+        while temp_times:
+            time = heapq.heappop(temp_times)
+            if time == n_low:
+                return True
+    
+    return False
 
 def get_c_val(node, closed_list, soft_obstacle):
     parent_node = node['parent']
-    parent_c_val = closed_list[parent_node]['c_val']
-    
-    cv = 1 if soft_obstacle.has_key(node['interval']) else 0
+    parent_c_val = parent_node['c_val']
+    node_interval = node['interval']
+    node_loc = node['loc']
+    cv = 1 if is_contain_obstacle(node_loc, node_interval, soft_obstacle) else 0
 
     n_low = node['interval'][0]
     n_edge = (parent_node['loc'], node['loc'])
-    ce = 1 if n_edge in soft_obstacle[n_low] else 0
+    ce = 1 if n_edge in is_contain_edge(parent_node['loc'], node_loc, node_interval[0], soft_obstacle) else 0
 
     return parent_c_val + cv + ce
 
@@ -164,35 +172,11 @@ def get_c_future(curr_loc, timestep, constraint_table):
     
     return c_val
 
-# Soft obstacle should look like: {location1: {"time1": ....,
-#                                             "time2": [agent1, agent2, agent3,....],
-#                                             "time3": [agent1, ...]
-#                                              },
-#                                  
-#                                  location2: {
-#                                               "time1": ....,
-#                                               "time2": [agent1, agent2, agent3,....]
-#                                             }
-#                                 }
-
-# safe_interval_table should look like this:
-#       
-#       safe_interval_table[location][interval_id] = [low, high)
-#       Ditctionary that is consists of: 
-#                        safe_interval_table = {
-#                                                   'location1': {
-#                                                                   [(low, high), (low2, high2), (low3, high3)...]   # id is the position of each interval (they are in chronological order)
-#                                                                 },
-#                                                   'location2': {
-#                                                                   [(low, high), (low2, high2), (low3, high3)...],
-#                                                                 },                  
-#                                              } 
-
 def sipps(my_map, start_loc, goal_loc, h_values, agent, hard_obstacle, soft_obstacle):    
 
     safe_interval_table = build_safe_interval_table(my_map, soft_obstacle, hard_obstacle, goal_loc)  #my_map is avaialble paths excluding walls
     
-    root = {'c_val': 0, 'loc': start_loc, 'g_val': 0, 'h_val': h_values[start_loc], 'interval': safe_interval_table[start_loc][1], 'id': 1, 'is_goal': False, 'parent': None}
+    root = {'c_val': 0, 'loc': start_loc, 'g_val': 0, 'h_val': h_values[start_loc], 'interval': safe_interval_table[start_loc][0], 'id': 1, 'is_goal': False, 'parent': None}
     lower_bound_timestep = 0
 
     if hard_obstacle.has_key(goal_loc):
@@ -201,8 +185,8 @@ def sipps(my_map, start_loc, goal_loc, h_values, agent, hard_obstacle, soft_obst
     open_list = []
     heapq.heappush(open_list, (0, root))
 
-    closed_list = dict()
-    # closed_list = {'c_val': , 'loc': }
+    closed_list = []
+
     while len(open_list) > 0:
         curr = pop_node(open_list)
         if curr['is_goal']:
@@ -210,12 +194,16 @@ def sipps(my_map, start_loc, goal_loc, h_values, agent, hard_obstacle, soft_obst
         
         if curr['loc'] == goal_loc and curr['interval'][0] >= lower_bound_timestep:
             c_future = get_c_future(curr['loc'], )
+            
             if c_future == 0:
                 return get_path(curr)
+
             updated_node = curr.copy()
             updated_node['c_val'] = curr['c_val'] + c_future
-            # insertNode(open_list, updated_node, closed_list)
-        # expandNode(curr, open_list, closed_list, safe_interval_table)
-        # P <- P V {n}: closed_list += curr
+            insert_node(updated_node, open_list, closed_list, h_values, soft_obstacle)
+
+        expand_node(my_map, curr, open_list, closed_list, safe_interval_table, hard_obstacle, soft_obstacle, h_values)
+
+        heapq.heappush(closed_list, (curr['c_val'], curr))
 
     raise BaseException('No solutions')
