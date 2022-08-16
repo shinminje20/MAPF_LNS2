@@ -1,3 +1,5 @@
+import heapq
+
 
 def get_sum_of_cost(paths):
     rst = 0
@@ -58,3 +60,128 @@ def get_path(goal_node):
     path.reverse()
     return path
 
+
+# safe_interval_table should look like this:
+#       
+#       safe_interval_table[location][interval_id] = [low, high)
+#       Ditctionary that is consists of: 
+#                        safe_interval_table = {
+#                                                   'location1': {
+#                                                                   [(low, high), (low2, high2), (low3, high3)...]   # id is the position of each interval (they are in chronological order)
+#                                                                 },
+#                                                   'location2': {
+#                                                                   [(low, high), (low2, high2), (low3, high3)...],    
+
+def build_unsafe_intervals(soft_obstacles, hard_obstacles):
+
+    hard_intervals = dict()
+
+    for (vertex, times) in hard_obstacles.items():
+        
+        intervals = []
+
+        prev = None
+        low = None
+        high = None
+        
+        for time in times:
+            
+            if prev is None:
+                prev = time
+                low = time
+                high = time
+                continue
+            
+            if prev + 1 == time:
+                high = time
+            else:
+                intervals.append((low, high))
+                prev = time
+                low = time
+                high = time
+
+        hard_intervals[vertex] = intervals
+    
+    soft_intervals = dict()
+
+    for (vertex, times) in soft_obstacles.items():
+        
+        intervals = []
+
+        prev = None
+        low = None
+        high = None
+        
+        for time in times:
+            
+            if prev is None:
+                prev = time
+                low = time
+                high = time
+                continue
+            
+            if prev + 1 == time:
+                high = time
+            else:
+                intervals.append((low, high))
+                prev = time
+                low = time
+                high = time
+
+        soft_intervals[vertex] = intervals
+
+    return soft_intervals, hard_intervals
+
+def merge_intervals(A, B):
+    
+    i = j = 0
+    res = []
+    while i < len(A) or j < len(B):
+        if i==len(A):
+            curr = B[j]
+            j+=1
+        elif j==len(B):
+            curr = A[i]
+            i+=1
+        elif A[i][0] < B[j][0]:
+            curr = A[i]
+            i+=1
+        else:
+            curr = B[j]
+            j+=1
+        if res and res[-1][-1] >= curr[0]:
+            res[-1][-1] = max(res[-1][-1],curr[-1])
+        else:
+            res.append(curr)
+    
+    return res
+
+def build_safe_interval_table(locations, soft_obstacles, hard_obstacles, goal_loc):
+
+    soft_unsafe_intervals, hard_unsafe_intervals = build_unsafe_intervals(soft_obstacles, hard_obstacles)
+
+    safe_interval_table = dict()
+
+    for v in locations:
+        
+        hard_intervals = []
+        soft_intervals = []
+
+        if v in hard_unsafe_intervals:
+            hard_intervals = hard_unsafe_intervals[v]
+
+        if v in soft_unsafe_intervals:
+            soft_intervals = soft_unsafe_intervals[v]
+
+        unsafe_intervals = merge_intervals(hard_intervals, soft_intervals)
+
+        time = 0
+        safe_intervals = []
+        
+        for (low, hi) in unsafe_intervals:
+            safe_intervals.append((time, low))
+            time = hi + 1
+        
+        safe_interval_table[v] = safe_intervals
+
+    return safe_interval_table

@@ -2,12 +2,6 @@ import heapq
 from Utils import *
 # from LNS import *
 
-def build_safe_interval_table():
-    pass
-
-def collision_check():
-    pass
-
 def move(loc, dir):
     directions = [(0, -1), (1, 0), (0,0), (0, 1), (-1, 0)]
     return loc[0] + directions[dir][0], loc[1] + directions[dir][1]
@@ -196,7 +190,7 @@ def get_c_future(curr_loc, timestep, constraint_table):
 
 def sipps(my_map, start_loc, goal_loc, h_values, agent, hard_obstacle, soft_obstacle):    
 
-    safe_interval_table = build_safe_interval_table()
+    safe_interval_table = build_safe_interval_table(my_map, soft_obstacle, hard_obstacle, goal_loc)  #my_map is avaialble paths excluding walls
     
     root = {'c_val': 0, 'loc': start_loc, 'g_val': 0, 'h_val': h_values[start_loc], 'interval': safe_interval_table[start_loc][1], 'id': 1, 'is_goal': False, 'parent': None}
     lower_bound_timestep = 0
@@ -205,7 +199,8 @@ def sipps(my_map, start_loc, goal_loc, h_values, agent, hard_obstacle, soft_obst
         lower_bound_timestep = max(hard_obstacle[goal_loc]) + 1
 
     open_list = []
-    push_node(open_list, root)
+    heapq.heappush(open_list, (0, root))
+
     closed_list = dict()
     # closed_list = {'c_val': , 'loc': }
     while len(open_list) > 0:
