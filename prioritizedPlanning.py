@@ -1,7 +1,7 @@
 from Utils import *
 import heapq
 
-def prioritized_planning(paths, neighbourhood, instanceMap, instanceAgents):
+def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, instanceGoals):
 	#randomize order of neighbourhood
     neighbourhood = priorityList(neighbourhood)
 
@@ -25,9 +25,8 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceAgents):
 
     soft_obstacles = {}
     for agent in neighbourhood:
-        agentInfo = instanceAgents[agent]
-        agentStart = (agentInfo[0], agentInfo[1]) #coordinates are in (x, y), map indexing is in [y][x]
-        agentGoal = (agentInfo[2], agentInfo[3])
+        agentStart = instanceStarts[agent] #coordinates are in (x, y), map indexing is in [y][x]
+        agentGoal = instanceGoals[agent]
 
         #build heuristics table
         h_values = compute_heuristics(instanceMap, agentGoal)
