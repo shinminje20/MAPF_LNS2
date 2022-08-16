@@ -3,6 +3,7 @@ def loadScen(scenarioFile, numAgents):
 	line = f.readline() #version text
 	line = f.readline() #first agent
 	tokens = line.split('\t') 
+	#[0] ???
 	#[1] map name
 	#[2] map width
 	#[3] map height
@@ -10,6 +11,7 @@ def loadScen(scenarioFile, numAgents):
 	#[5] start y
 	#[6] goal x
 	#[7] goal y
+	#[8] ???
 	mapName = tokens[1]
 	mapWidth = int(tokens[2])
 	mapHeight = int(tokens[3])
@@ -18,23 +20,28 @@ def loadScen(scenarioFile, numAgents):
 	mapline = f2.readline()
 	mapline = f2.readline()
 	mapline = f2.readline()
-	instanceMap = []
+	instanceMapTxt = []
 	for i in range(mapHeight):
-		instanceMap.append(f2.readline().strip())
+		instanceMapTxt.append(f2.readline().strip())
 	f2.close()
 
-	instanceAgents = []
-	instanceAgents.append((tokens[4], tokens[5], tokens[6], tokens[7]))
-	for i in range(2, numAgents):
+	instanceMap = []
+	for y in instanceMapTxt:
+		instanceMap.append(list(map(lambda c : True if c == '.' else False, y)))
+
+	instanceStarts = []
+	instanceGoals = []
+	instanceStarts.append((int(tokens[4]), int(tokens[5])))
+	instanceGoals.append((int(tokens[6]), int(tokens[7])))
+	for i in range(2, numAgents+1):
 		tokens = f.readline().split()
 		if len(tokens) == 0:
 			break;
-		instanceAgents.append((tokens[4], tokens[5], tokens[6], tokens[7]))
+		instanceStarts.append((int(tokens[4]), int(tokens[5])))
+		instanceGoals.append((int(tokens[6]), int(tokens[7])))
 	f.close()
-	print(instanceAgents)
-	return instanceMap, instanceAgents
 
-#loadScen('Berlin_1_256-even-1.scen', 5)
+	return instanceMap, instanceStarts, instanceGoals
 
 
 

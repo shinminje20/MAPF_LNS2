@@ -1,4 +1,5 @@
 from Utils import *
+import heapq
 
 def prioritized_planning(paths, neighbourhood, instanceMap, instanceAgents):
 	#randomize order of neighbourhood
@@ -42,8 +43,23 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceAgents):
 
 
 def add_constraints_from_path(constraint_table, path):
-	#TODO implement
-    pass
+    #add vertex constraint for time 0
+    if path[0] not in constraint_table:
+        constraint_table[path[0]] = []
+    constraint_table[path[0]].heappush(0)
+    
+	for i in range(1, len(path)):
+        #add vertex constraint
+        if path[i] not in constraint_table:
+            constraint_table[path[i]] = []
+        constraint_table[path[i]].heappush(i)
+
+        #add edge constraint
+        if (path[i], path[i-1]) not in constraint_table:
+            constraint_table[(path[i], path[i-1])] = []
+        constraint_table[(path[i], path[i-1])].heappush(i)
+
+    return constraint_table
 
 
 def priorityList(neighbourhood):
