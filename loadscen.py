@@ -42,6 +42,9 @@ def loadScen(scenarioFile, numAgents):
 	f.close()
 
 	return instanceMap, instanceStarts, instanceGoals
+	#instanceStarts = [(x, y)]
+	#instanceGoals = [(x, y)]
+	#instanceMap = [[True/False, ...], ...]
 
 
 
