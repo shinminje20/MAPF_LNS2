@@ -207,9 +207,9 @@ def get_c_future(curr_loc, timestep, constraint_table):
     
     return c_val
 
-def sipps(my_map, start_loc, goal_loc, h_values, agent, hard_obstacle, soft_obstacle):    
+def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):    
 
-    safe_interval_table = build_safe_interval_table(my_map, soft_obstacle, hard_obstacle, goal_loc)  #my_map is avaialble paths excluding walls
+    safe_interval_table = build_safe_interval_table(my_map, soft_obstacle, hard_obstacle)  #my_map is avaialble paths excluding walls
     
     root = {'c_val': 0, 'loc': start_loc, 'g_val': 0, 'h_val': h_values[start_loc], 'interval': safe_interval_table[start_loc][0], 'id': 1, 'is_goal': False, 'parent': None}
     lower_bound_timestep = 0
