@@ -1,46 +1,12 @@
 from operator import ne
-
+from tkinter import N
+from loadscen import *
 from ALNS import *
-
-
-def ALNS():
-    # from ALNS import *
-    pass
-
-
-def updateWeight(weight, r, cp1, cp2):
-    # from ALNS import *
-    pass
-
-
-def collisionNeighbourhood(paths, N, width, height, instanceMap):
-    # from collisionNeighbourhood import collisionNeighbourhood
-    pass
-
-
-def faulureNeighbourhood(pahts, N):
-    # from faulureNeighbourhood import faulureNeighbourhood
-    pass
-
-
-def randomNeighbourhood(paths, N):
-    # from randomNeighbourhood import randomNeighbourhood
-    pass
-
-
-def prioritized_planning(paths, neighbourhood, instanceMap, instanceAgents):
-    # from prioritizedPlanning import *
-    pass
-
-
-def compare(cord1, cord2):
-    # from LNSUtil import *
-    pass
-
-
-def deg(path):
-    # from LNSUtil import *
-    pass
+from collisionneighbourhood import *
+from failureBasedNeighbourhood import *
+from randomNeighborhood import *
+from prioritizedPlanning import *
+from LNSUtil import *
 
 
 def selectNeighbour(paths, neighbourhood_kind, numNeighbourhood, width, height, instanceMap):
@@ -78,9 +44,7 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, ALNS_weight):
     # newNeighbourhood is P+ in the paper (list of paths)
     newNeighbourhood = prioritized_planning(
         paths, neighbourhoodIndex_inPath, instanceMap, neighbourhood)
-    ''' 
-        please let me know if I put correct paramter for PP 
-    '''
+
 
     newPaths = paths
     for index in neighbourhoodIndex_inPath:
@@ -97,20 +61,19 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, ALNS_weight):
 
 
 def LNS2(numNeighbourhood, width, height, instanceMap,):
-    ''' 
-        please revise paramter of PP for first path
-    '''
-    firstPath = prioritized_planning(instanceMap)
+    newPath = prioritized_planning([], list(
+        range(0, len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
+    
     numCp = sum(deg(firstPath))
     if (numCp == 0):
-        return firstPath
+        return newPath
 
     ALNS_weight = [1, 1, 1]
     ALNS_r = 0.1
 
     while numCp != 0:
         previousCP = numCp
-        newPath = replan(firstPath, numNeighbourhood, width,
+        newPath = replan(newPath, numNeighbourhood, width,
                          height, instanceMap, ALNS_weight)
         numCp = sum(deg(newPath))
         ALNS_weight = updateWeight(ALNS_weight, ALNS_r, previousCP, numCp)
@@ -119,4 +82,10 @@ def LNS2(numNeighbourhood, width, height, instanceMap,):
 
 
 if __name__ == "__main__":
-    print("aa")
+    numNeighbourhood = 2
+    instanceMap, instanceStarts, instanceGoals = loadScen(
+        "empty-8-8-even-1.scen", 5)
+    print(instanceStarts)
+    print(instanceGoals)
+    path = LNS2(numNeighbourhood, 8, 8, instanceMap,
+                instanceStarts, instanceGoals)
