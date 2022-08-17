@@ -83,6 +83,41 @@ def pop_node(open_list):
     _, curr = heapq.heappop(open_list)
     return curr
 
+def get_earlieset_arrival_time(edge, low, high, hard_obstacle, soft_obstacle):
+
+    new_low = low
+
+    if soft_obstacle is not None:
+
+        temp_times = copy(hard_obstacle[edge])
+
+        while temp_times:
+            
+            time = heapq.heappop(temp_times)
+
+            if time == new_low:
+                new_low += 1
+        
+        temp_times = copy(soft_obstacle[edge])
+
+        while temp_times:
+            
+            time = heapq.heappop(temp_times)
+
+            if time == new_low:
+                new_low += 1
+
+    else:
+        temp_times = copy(hard_obstacle[edge])
+
+        while temp_times:
+            
+            time = heapq.heappop(temp_times)
+
+            if time == new_low:
+                new_low += 1
+
+    return new_low if new_low < high else None
 
 def expand_node(my_map, curr_node, open_list, closed_list, safe_interval_table, hard_obstacle, soft_obstacle, h_values):
     
@@ -91,21 +126,21 @@ def expand_node(my_map, curr_node, open_list, closed_list, safe_interval_table, 
     node_low = curr_node['interval'][0]
     node_high = curr_node['interval'][1]
     
-    valid_neighbors = get_valid_nodes(curr_loc, node_low, node_high, safe_interval_table)
+    valid_neighbors = get_valid_nodes(my_map, curr_loc, node_low, node_high, safe_interval_table)
 
     # Algorithm 2 line 2-3
     for (next_loc, interval_id) in valid_neighbors:
         low = safe_interval_table[next_loc][interval_id][0]
         high = safe_interval_table[next_loc][interval_id][1]
         
-        if hard_obstacle.has_key([curr_loc, next_loc]):
-            # MAPF_LNS2 깃헙 보고 어케 해야댈지 보자
-            low = get_earlieset_arrival_time() # uncolide with hard_obstacle([curr_loc, next_loc])
-        else:
-            continue
+        if hard_obstacle.has_key((curr_loc, next_loc)):
+            
+            low = get_earlieset_arrival_time((curr_loc, next_loc), low, high, hard_obstacle, None) # uncolide with hard_obstacle([curr_loc, next_loc])
+
+            if low is None:
+                continue
         
-        earliest_low = None
-        earliest_low = get_earlieset_arrival_time() # uncolide with hard, soft obstacle
+        earliest_low = get_earlieset_arrival_time((curr_loc, next_loc), low, high, hard_obstacle, soft_obstacle) # uncolide with hard, soft obstacle
 
         if earliest_low is not None and earliest_low > low:
             
