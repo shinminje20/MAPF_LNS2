@@ -175,11 +175,16 @@ def merge_intervals(A, B):
     
     return res
 
-def build_safe_interval_table(locations, soft_obstacles, hard_obstacles):
+def build_safe_interval_table(my_map, soft_obstacles, hard_obstacles):
 
     soft_unsafe_intervals, hard_unsafe_intervals = build_unsafe_intervals(soft_obstacles, hard_obstacles)
 
     safe_interval_table = dict()
+    locations = []
+    for i in range(len(my_map)):
+        for j in range(len(my_map[i])):
+            if my_map[i][j]:
+                locations.append((i, j))
 
     for v in locations:
         
