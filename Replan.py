@@ -18,7 +18,7 @@ def selectNeighbour(paths, neighbourhood_kind, numNeighbourhood, width, height, 
             paths, numNeighbourhood, width, height, instanceMap)
     elif neighbourhood_kind == 1:
         # failure
-        neighbourhood = faulureNeighbourhood(paths, numNeighbourhood)
+        neighbourhood = failureNeighbourhood(paths, numNeighbourhood)
     else:
         # random
         neighbourhood = randomNeighbourhood(paths, numNeighbourhood)

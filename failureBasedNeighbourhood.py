@@ -121,6 +121,7 @@ def failureNeighbourhood(path, n):
 
     union = makeUnion(As, Ag)
 
+    # paths which is not selected as neighbour
     remain = difference(pathCopy, union)
 
     if len(union) == 0:
@@ -131,19 +132,23 @@ def failureNeighbourhood(path, n):
             neighbourIndex.append(path.index(union[i]))
         diff = n-len(neighbour)
         for j in range(0, diff, 1):
-            randomNeighbour = neighbour[random.randint(0, len(neighbour)-1)]
+            randomNeighbour = neighbour[random.randint(
+                0, len(neighbour)-1)]  # a(j) from neighbour
             arr = []
             for k in range(0, len(remain), 1):
                 if (randomNeighbour[len(randomNeighbour)-1] in remain[k]):
                     arr.append(remain[k])
-            randomIndex = random.randint(0, len(arr)-1)
+            if (len(arr) == 0):
+                continue
+            randomIndex = random.randint(
+                0, len(arr)-1)
             neighbour.append(arr[randomIndex])
             neighbourIndex.append(path.index(arr[randomIndex]))
     else:
         if (len(As) == 0):
             for x in range(0, n-1, 1):
                 neighbour.append(Ag[x])
-                neighbourIndex.append(path.index(Ag(x)))
+                neighbourIndex.append(path.index(Ag[x]))
         elif(len(Ag) >= n-1):
             visitTimeList = whenVisitList(As, a1[0])
             minIndex = visitTimeList.index(min(visitTimeList))
@@ -162,5 +167,4 @@ def failureNeighbourhood(path, n):
                 neighbourIndex.append(path.index(sortedDic[sortedKeys[0]]))
                 del sortedDic[sortedKeys[0]]
 
-    # return neighbour
-    return neighbourIndex
+    return list(set(neighbourIndex))
