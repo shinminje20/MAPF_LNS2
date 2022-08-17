@@ -241,5 +241,6 @@ def sipps(my_map, start_loc, goal_loc, h_values, agent, hard_obstacle, soft_obst
 
         heapq.heappush(closed_list, (curr['c_val'], curr))
 
-    raise BaseException('No solutions')
+    # If there is no solution, return None to track of agents who does not have solutions when finding initial paths
+    return None
 
