@@ -145,16 +145,14 @@ def build_safe_interval_table(my_map, hard_obstacles):
             unsafe_intervals = hard_unsafe_intervals[v]
 
         safe_intervals = []
-        if len(unsafe_intervals) != 0:
+        
+        time = 0
+        
+        for (low, hi) in unsafe_intervals:
+            safe_intervals.append((time, low))
+            time = hi + 1
 
-            time = 0
-            
-            for (low, hi) in unsafe_intervals:
-                safe_intervals.append((time, low))
-                time = hi + 1
-
-        else:
-            safe_intervals.append((0, sys.maxsize))
+        safe_intervals.append((time, sys.maxsize))
         
         safe_interval_table[v] = safe_intervals
 
