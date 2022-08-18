@@ -140,7 +140,7 @@ def get_earlieset_arrival_time(edge, low, high, hard_obstacle, soft_obstacle):
 
             if time == new_low:
                 new_low += 1
-                
+
     else:
         temp_times = copy(hard_obstacle[edge])
 
@@ -195,7 +195,7 @@ def expand_node(my_map, curr_node, open_list, closed_list, safe_interval_table, 
 def is_contain_obstacle(node_loc, interval, soft_obstacle):
     
     if node_loc in soft_obstacle:
-        temp_times = copy(soft_obstacle[node_loc])
+        temp_times = copy.copy(soft_obstacle[node_loc])
 
         while len(temp_times) > 0:
             time = heapq.heappop(temp_times)
@@ -208,7 +208,7 @@ def is_contain_edge(parent_loc, node_loc, n_low, soft_obstacle):
 
     if (parent_loc, node_loc) in soft_obstacle:
 
-        temp_times = copy(soft_obstacle[(parent_loc, node_loc)])
+        temp_times = copy.copy(soft_obstacle[(parent_loc, node_loc)])
 
         while len(temp_times) > 0:
             time = heapq.heappop(temp_times)
@@ -234,7 +234,7 @@ def get_c_future(curr_loc, soft_obstacle, n_low):
     c_future = 0
     
     if curr_loc in soft_obstacle:
-        temp_times = copy(soft_obstacle[curr_loc])
+        temp_times = copy.copy(soft_obstacle[curr_loc])
         
         while len(temp_times) > 0:
             time = heapq.heappop(temp_times)

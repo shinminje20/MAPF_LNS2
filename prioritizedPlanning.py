@@ -62,8 +62,8 @@ def add_constraints_from_path(constraint_table, path):
 
         #add edge constraint
         if (path[i], path[i-1]) not in constraint_table:
-            constraint_table[(path[i], path[i-1])] = set()
-        constraint_table[(path[i], path[i-1])].add(i)
+            constraint_table[(path[i], path[i-1])] = []
+        heapq.heappush(constraint_table[(path[i], path[i-1])], i)
 
     return constraint_table
 

@@ -104,7 +104,7 @@ def build_unsafe_intervals(soft_obstacles, hard_obstacles):
         low = None
         high = None
         
-        temp_times = copy(times)
+        temp_times = copy.copy(times)
         while temp_times:
             time = heapq.heappop(temp_times)
             
@@ -134,7 +134,7 @@ def build_unsafe_intervals(soft_obstacles, hard_obstacles):
         low = None
         high = None
         
-        temp_times = copy(times)
+        temp_times = copy.copy(times)
 
         while temp_times:
             time = heapq.heappop(temp_times)
