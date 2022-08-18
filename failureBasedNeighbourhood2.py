@@ -2,6 +2,7 @@ import random
 from LNSUtil import *
 import sys
 
+
 def findA1(degList):
     probList = []
     for i in range(0, len(degList), 1):
@@ -12,17 +13,20 @@ def findA1(degList):
     result = probList[ramdonIndex]
     return result
 
+
 def whenVisit(path, goal):
-    for i in range(len(path)):
-        if path[i] == goal:
+    for i, loc in enumerate(path):
+        if loc == goal:
             return i
     return 0
+
 
 def whenVisitList(paths, agents, goal):
     visitTimeList = []
     for agent in agents:
         visitTimeList.append(whenVisit(paths[agent], goal))
     return visitTimeList
+
 
 def minVisitTimeAgent(paths, agents, goal):
     minTime = sys.maxsize
@@ -34,22 +38,24 @@ def minVisitTimeAgent(paths, agents, goal):
             minAgent = agent
     return minAgent
 
+
 def makeVisitTimeWithPathDic(visitTimeList, As):
     # sorted one
     dic = {}
-    for i in range(len(visitTimeList)):
-        if visitTimeList[i] not in dic:
-            dic[visitTimeList[i]] = []
-        dic[visitTimeList[i]].append(As[i])
+    for i, visitTime in enumerate(visitTimeList):
+        if visitTime not in dic:
+            dic[visitTime] = []
+        dic[visitTime].append(As[i])
     sortedkeys = list(dic.keys())
     sortedkeys.sort()
     return dic, sortedkeys
 
+
 def failureNeighbourhood(paths, n):
     paths_sets = []
-    for i in range(len(paths)):
+    for i, path in enumerate(paths):
         paths_sets.append(set())
-        for pos in paths[i]:
+        for pos in path:
             paths_sets[i].add(pos)
 
     degList = deg(paths)
@@ -59,14 +65,18 @@ def failureNeighbourhood(paths, n):
 
     As = []
     a1Start = paths[a1Id][0]
-    for i in range(len(paths_sets)):
-        if a1Start in paths_sets[i]:
+    for i, path in enumerate(paths_sets):
+        if a1Start in path:
             As.append(i)
 
     Ag = []
     for i in range(len(paths_sets)):
-        if paths[i][-1] in path_sets[a1Id]:
+        if paths[i][-1] in paths_sets[a1Id]:
             Ag.append(i)
+    print("Ag")
+    print(Ag)
+
+    union = set(Ag).union(set(As))
 
     union = set(As).union(set(Ag))
 
@@ -99,14 +109,14 @@ def failureNeighbourhood(paths, n):
         else:
             visitTimeList = whenVisitList(paths, As, paths[a1Id][0])
             sortedDic, sortedKeys = makeVisitTimeWithPathDic(visitTimeList, As)
-            for v in range(len(Ag)):
-                neighbourhood.append(Ag[v])
-            for g in range(len(sortedKeys)):
-                if len(neighbourhood) + len(sortedDic[sortedKeys[g]]) < n:
-                    neighbourhood.append(sortedDic[sortedKeys[g]])
+            for A in Ag:
+                neighbourhood.append(A)
+            for key in sortedKeys:
+                if len(neighbourhood) + len(sortedDic[key]) < n:
+                    neighbourhood.append(sortedDic[key])
                 else:
                     count = n - len(neighbourhood)
                     for i in range(count):
-                        neighbourhood.append(sortedDic[sortedKeys[g]][i])
+                        neighbourhood.append(sortedDic[key][i])
 
-    return neighbourhood
+    return list(set(neighbourhood))
