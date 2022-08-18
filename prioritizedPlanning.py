@@ -32,7 +32,7 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, inst
         agentGoal = instanceGoals[agent]
 
         #build heuristics table
-        h_values = compute_heuristics2(instanceMap, agentGoal)
+        h_values = compute_heuristics(instanceMap, agentGoal)
         #print(h_values)
         agentPath = sipps(instanceMap, agentStart, agentGoal, h_values, hard_obstacles, soft_obstacles)
         newPaths.append(agentPath)
