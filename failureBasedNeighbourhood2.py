@@ -78,8 +78,6 @@ def failureNeighbourhood(paths, n):
 
     union = set(As).union(set(Ag))
 
-    union = set(As).union(set(Ag))
-
     remain = set()
     for i in range(len(paths)):
         if i not in union:
