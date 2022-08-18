@@ -9,14 +9,14 @@ from prioritizedPlanning import *
 from LNSUtil import *
 
 
-def selectNeighbour(paths, neighbor_selection_method, numNeighbourhood, width, height, instanceMap):
+def selectNeighbour(paths, neighbourhood_kind, numNeighbourhood, width, height, instanceMap):
     neighbourhood = []
     neighbourhoodIndex_inPath = []
-    if neighbor_selection_method == 0:
+    if neighbourhood_kind == 0:
         # collision
         neighbourhood = collisionNeighbourhood(
             paths, numNeighbourhood, width, height, instanceMap)
-    elif neighbor_selection_method == 1:
+    elif neighbourhood_kind == 1:
         # failure
         neighbourhood = failureNeighbourhood(paths, numNeighbourhood)
     else:
@@ -36,10 +36,10 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, ALNS_weight):
     # ALNS_r = 0.1
 
     # index0: collision, index1: failure, index2: random
-    neighbor_selection_method = ALNS(ALNS_weight)
+    neighbourhood_kind = ALNS(ALNS_weight)
     # neighbourhood is P- in the paper (list of paths)
     neighbourhood, neighbourhoodIndex_inPath = selectNeighbour(
-        paths, neighbor_selection_method, numNeighbourhood, width, height, instanceMap)
+        paths, neighbourhood_kind, numNeighbourhood, width, height, instanceMap)
 
     # newNeighbourhood is P+ in the paper (list of paths)
     newNeighbourhood = prioritized_planning(

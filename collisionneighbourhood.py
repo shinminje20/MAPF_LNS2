@@ -74,7 +74,7 @@ def collisionNeighbourhood(paths, N, width, height, instanceMap):
 				if nextPos == None:
 					#None move was found, end loop and restart or do nothing?
 					#nextCollidableAgentFound = True
-					continue
+					break
 				else:
 					currPos = nextPos
 					# check for other agents at this time step
@@ -111,11 +111,11 @@ def randomValidMove(currPos, instanceMap, width, height):
 	validMoves = []
 	for move in moves:
 		nextPos = [currPos[0] + move[0], currPos[1] + move[1]]
-		if (instanceMap[nextPos[0]][nextPos[1]] == '.' 
-			and nextPos[0] >= 0 
+		if (nextPos[0] >= 0 
 			and nextPos[0] < height 
 			and nextPos[1] >= 0 
-			and nextPos[1] < width):
+			and nextPos[1] < width 
+			and instanceMap[nextPos[0]][nextPos[1]] == True):
 			validMoves.append(nextPos)
 	if len(validMoves) > 0:
 		return validMoves[randrange(0, len(validMoves))]
