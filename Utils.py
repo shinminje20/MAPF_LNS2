@@ -1,5 +1,6 @@
 import heapq
 import copy
+import sys
 
 def get_sum_of_cost(paths):
     rst = 0
@@ -197,14 +198,18 @@ def build_safe_interval_table(my_map, soft_obstacles, hard_obstacles):
         if v in soft_unsafe_intervals:
             soft_intervals = soft_unsafe_intervals[v]
 
-        unsafe_intervals = merge_intervals(hard_intervals, soft_intervals)
+        if len(hard_intervals) != 0 or len(soft_intervals) != 0:
+            unsafe_intervals = merge_intervals(hard_intervals, soft_intervals)
 
-        time = 0
-        safe_intervals = []
-        
-        for (low, hi) in unsafe_intervals:
-            safe_intervals.append((time, low))
-            time = hi + 1
+            time = 0
+            safe_intervals = []
+            
+            for (low, hi) in unsafe_intervals:
+                safe_intervals.append((time, low))
+                time = hi + 1
+
+        else:
+            safe_intervals.append((0, sys.maxint))
         
         safe_interval_table[v] = safe_intervals
 
