@@ -13,8 +13,8 @@ def findA1(degList):
     return result
 
 def whenVisit(path, goal):
-    for i, path in enumerate(path):
-        if path == goal:
+    for i, loc in enumerate(path):
+        if loc == goal:
             return i
     return 0
 
@@ -47,9 +47,9 @@ def makeVisitTimeWithPathDic(visitTimeList, As):
 
 def failureNeighbourhood(paths, n):
     paths_sets = []
-    for i in range(len(paths)):
+    for i, path in enumerate(paths):
         paths_sets.append(set())
-        for pos in paths[i]:
+        for pos in path:
             paths_sets[i].add(pos)
 
     degList = deg(paths)
@@ -59,17 +59,18 @@ def failureNeighbourhood(paths, n):
 
     As = []
     a1Start = paths[a1Id][0]
-    for i in range(len(paths_sets)):
-        if a1Start in paths_sets[i]:
+    for i, path in enumerate(paths_sets):
+        if a1Start in path:
             As.append(i)
 
     Ag = []
-    for i in range(len(paths_sets)):
-        if paths[i][-1] in path_sets[a1Id]:
+    for i, path in enumerate(paths_sets):
+        if paths[i][-1] in path:
             Ag.append(i)
 
     remain = set()
-    for i in range(len(paths)):
+    union = set(As).union(set(Ag))
+    for i in enumerate(paths):
         if i not in union:
             remain.add(i)
 
@@ -98,14 +99,14 @@ def failureNeighbourhood(paths, n):
         else:
             visitTimeList = whenVisitList(paths, As, paths[a1Id][0])
             sortedDic, sortedKeys = makeVisitTimeWithPathDic(visitTimeList, As)
-            for v in range(len(Ag)):
-                neighbourhood.append(Ag[v])
-            for g in range(len(sortedKeys)):
-                if len(neighbourhood) + len(sortedDic[sortedKeys[g]]) < n:
-                    neighbourhood.append(sortedDic[sortedKeys[g]])
+            for A in Ag:
+                neighbourhood.append(A)
+            for key in sortedKeys:
+                if len(neighbourhood) + len(sortedDic[key]) < n:
+                    neighbourhood.append(sortedDic[key])
                 else:
                     count = n - len(neighbourhood)
                     for i in range(count):
-                        neighbourhood.append(sortedDic[sortedKeys[g]][i])
+                        neighbourhood.append(sortedDic[key][i])
 
     return neighbourhood
