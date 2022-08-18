@@ -91,7 +91,7 @@ def get_earlieset_arrival_time(edge, low, high, hard_obstacle, soft_obstacle):
 
         temp_times = copy(hard_obstacle[edge])
 
-        while temp_times:
+        while len(temp_times) > 0:
             
             time = heapq.heappop(temp_times)
 
@@ -100,7 +100,7 @@ def get_earlieset_arrival_time(edge, low, high, hard_obstacle, soft_obstacle):
         
         temp_times = copy(soft_obstacle[edge])
 
-        while temp_times:
+        while len(temp_times) > 0:
             
             time = heapq.heappop(temp_times)
 
@@ -110,7 +110,7 @@ def get_earlieset_arrival_time(edge, low, high, hard_obstacle, soft_obstacle):
     else:
         temp_times = copy(hard_obstacle[edge])
 
-        while temp_times:
+        while len(temp_times) > 0:
             
             time = heapq.heappop(temp_times)
 
@@ -164,7 +164,7 @@ def is_contain_obstacle(node_loc, interval, soft_obstacle):
     if node_loc in soft_obstacle:
         temp_times = copy(soft_obstacle[node_loc])
 
-        while temp_times:
+        while len(temp_times) > 0:
             time = heapq.heappop(temp_times)
             if interval[0] <= time and time < interval[1]:
                 return True
@@ -177,7 +177,7 @@ def is_contain_edge(parent_loc, node_loc, n_low, soft_obstacle):
 
         temp_times = copy(soft_obstacle[(parent_loc, node_loc)])
 
-        while temp_times:
+        while len(temp_times) > 0:
             time = heapq.heappop(temp_times)
             if time == n_low:
                 return True
@@ -202,7 +202,7 @@ def get_c_future(curr_loc, soft_obstacle, n_low):
 
     temp_times = copy(soft_obstacle[curr_loc])
     
-    while temp_times:
+    while len(temp_times) > 0:
         time = heapq.heappop(temp_times)
         if time > n_low:
             c_future = len(temp_times) + 1    # Since all of rest of times in temp_times will be greater than n_low from now, 
