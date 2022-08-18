@@ -92,7 +92,7 @@ def get_path(goal_node):
 #                                                   'location2': {
 #                                                                   [(low, high), (low2, high2), (low3, high3)...],    
 
-def build_unsafe_intervals(soft_obstacles, hard_obstacles):
+def build_unsafe_intervals(hard_obstacles):
 
     hard_intervals = dict()
 
@@ -123,67 +123,12 @@ def build_unsafe_intervals(soft_obstacles, hard_obstacles):
                 high = time
 
         hard_intervals[vertex] = intervals
-    
-    soft_intervals = dict()
 
-    for (vertex, times) in soft_obstacles.items():
-        
-        intervals = []
+    return hard_intervals
 
-        prev = None
-        low = None
-        high = None
-        
-        temp_times = copy.copy(times)
+def build_safe_interval_table(my_map, hard_obstacles):
 
-        while temp_times:
-            time = heapq.heappop(temp_times)
-            
-            if prev is None:
-                prev = time
-                low = time
-                high = time
-                continue
-            
-            if prev + 1 == time:
-                high = time
-            else:
-                intervals.append((low, high))
-                prev = time
-                low = time
-                high = time
-
-        soft_intervals[vertex] = intervals
-
-    return soft_intervals, hard_intervals
-
-def merge_intervals(A, B):
-    
-    i = j = 0
-    res = []
-    while i < len(A) or j < len(B):
-        if i==len(A):
-            curr = B[j]
-            j+=1
-        elif j==len(B):
-            curr = A[i]
-            i+=1
-        elif A[i][0] < B[j][0]:
-            curr = A[i]
-            i+=1
-        else:
-            curr = B[j]
-            j+=1
-        if res and res[-1][-1] >= curr[0]:
-            res[-1][-1] = max(res[-1][-1],curr[-1])
-        else:
-            res.append(curr)
-    
-    return res
-
-def build_safe_interval_table(my_map, soft_obstacles, hard_obstacles):
-
-    soft_unsafe_intervals, hard_unsafe_intervals = build_unsafe_intervals(soft_obstacles, hard_obstacles)
+    hard_unsafe_intervals = build_unsafe_intervals(hard_obstacles)
 
     safe_interval_table = dict()
     locations = []
@@ -194,27 +139,20 @@ def build_safe_interval_table(my_map, soft_obstacles, hard_obstacles):
 
     for v in locations:
         
-        hard_intervals = []
-        soft_intervals = []
+        unsafe_intervals = []
 
         if v in hard_unsafe_intervals:
-            hard_intervals = hard_unsafe_intervals[v]
-
-        if v in soft_unsafe_intervals:
-            soft_intervals = soft_unsafe_intervals[v]
+            unsafe_intervals = hard_unsafe_intervals[v]
 
         safe_intervals = []
-        if len(hard_intervals) != 0 or len(soft_intervals) != 0:
-            unsafe_intervals = merge_intervals(hard_intervals, soft_intervals)
+        
+        time = 0
+        
+        for (low, hi) in unsafe_intervals:
+            safe_intervals.append((time, low))
+            time = hi + 1
 
-            time = 0
-            
-            for (low, hi) in unsafe_intervals:
-                safe_intervals.append((time, low))
-                time = hi + 1
-
-        else:
-            safe_intervals.append((0, sys.maxsize))
+        safe_intervals.append((time, sys.maxsize))
         
         safe_interval_table[v] = safe_intervals
 
