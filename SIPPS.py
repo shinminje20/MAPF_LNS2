@@ -136,11 +136,19 @@ def get_earlieset_arrival_time(edge, low, high, hard_obstacle, soft_obstacle):
         temp_times = copy(soft_obstacle[edge])
 
         while len(temp_times) > 0:
+            time = heapq.heappop(temp_times)
 
+            if time == new_low:
+                new_low += 1
+                
     else:
         temp_times = copy(hard_obstacle[edge])
 
         while len(temp_times) > 0:
+            time = heapq.heappop(temp_times)
+
+            if time == new_low:
+                new_low += 1
 
     return new_low if new_low < high else None
 
