@@ -13,8 +13,8 @@ def findA1(degList):
     return result
 
 def whenVisit(path, goal):
-    for i in range(len(path)):
-        if path[i] == goal:
+    for i, path in enumerate(path):
+        if path == goal:
             return i
     return 0
 
@@ -37,10 +37,10 @@ def minVisitTimeAgent(paths, agents, goal):
 def makeVisitTimeWithPathDic(visitTimeList, As):
     # sorted one
     dic = {}
-    for i in range(len(visitTimeList)):
-        if visitTimeList[i] not in dic:
-            dic[visitTimeList[i]] = []
-        dic[visitTimeList[i]].append(As[i])
+    for i, visitTime in enumerate(visitTimeList):
+        if visitTime not in dic:
+            dic[visitTime] = []
+        dic[visitTime].append(As[i])
     sortedkeys = list(dic.keys())
     sortedkeys.sort()
     return dic, sortedkeys

@@ -1,7 +1,7 @@
 def compare(cord1, cord2):
-    if cord1[0] == cord2[0]:
-        if cord1[1] == cord2[1]:
-            return True
+
+    if cord1[0] == cord2[0] and cord1[1] == cord2[1]:
+        return True
 
     return False
 
@@ -19,9 +19,7 @@ def deg(path):
         for secondPath in range(0, len(path), 1):
             if(path[firstPath] == path[secondPath]):
                 continue
-            length = len(path[firstPath])
-            if (len(path[firstPath]) > len(path[secondPath])):
-                length = len(path[secondPath])
+            length = len(path[secondPath]) if len(path[firstPath]) > len(path[secondPath]) else len(path[firstPath])
             for timestep in range(0, length, 1):
                 if compare(path[firstPath][timestep], path[secondPath][timestep]):
                     deg += 1
