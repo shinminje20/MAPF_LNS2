@@ -9,44 +9,39 @@ from prioritizedPlanning import *
 from LNSUtil import *
 
 
-def selectNeighbour(paths, neighbor_selection_method, numNeighbourhood, width, height, instanceMap):
+def selectNeighbour(paths, neighbourhood_kind, numNeighbourhood, width, height, instanceMap):
     neighbourhood = []
-    neighbourhoodIndex_inPath = []
-    if neighbor_selection_method == 0:
+    if neighbourhood_kind == 0:
         # collision
         neighbourhood = collisionNeighbourhood(
             paths, numNeighbourhood, width, height, instanceMap)
-    elif neighbor_selection_method == 1:
+    elif neighbourhood_kind == 1:
         # failure
         neighbourhood = failureNeighbourhood(paths, numNeighbourhood)
     else:
         # random
         neighbourhood = randomNeighbourhood(paths, numNeighbourhood)
 
-    for agent in neighbourhood:
-        index = paths.index(agent)
-        neighbourhoodIndex_inPath.append(index)
-
-    return neighbourhood, neighbourhoodIndex_inPath
+    return neighbourhood
 
 
 # replan untill collision free
-def replan(paths, numNeighbourhood, width, height, instanceMap, ALNS_weight):
+def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight):
     # ALNS_weight = [1, 1, 1]
     # ALNS_r = 0.1
 
     # index0: collision, index1: failure, index2: random
-    neighbor_selection_method = ALNS(ALNS_weight)
+    neighbourhood_kind = ALNS(ALNS_weight)
     # neighbourhood is P- in the paper (list of paths)
-    neighbourhood, neighbourhoodIndex_inPath = selectNeighbour(
-        paths, neighbor_selection_method, numNeighbourhood, width, height, instanceMap)
+    neighbourhood = selectNeighbour(
+        paths, neighbourhood_kind, numNeighbourhood, width, height, instanceMap)
 
     # newNeighbourhood is P+ in the paper (list of paths)
     newNeighbourhood = prioritized_planning(
-        paths, neighbourhoodIndex_inPath, instanceMap, neighbourhood)
+        paths, neighbourhood, instanceMap, instanceStarts, instanceGoals)
 
     newPaths = paths
-    for index in neighbourhoodIndex_inPath:
+    for index in neighbourhood:
         # newPaths[index] = None
         newPaths[index] = newNeighbourhood[index]
 
@@ -59,7 +54,7 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, ALNS_weight):
     return paths
 
 
-def LNS2(numNeighbourhood, width, height, instanceMap,):
+def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
     newPath = prioritized_planning([], list(
         range(0, len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
 
@@ -84,7 +79,5 @@ if __name__ == "__main__":
     numNeighbourhood = 2
     instanceMap, instanceStarts, instanceGoals = loadScen(
         "empty-8-8-even-1.scen", 5)
-    print(instanceStarts)
-    print(instanceGoals)
     path = LNS2(numNeighbourhood, 8, 8, instanceMap,
                 instanceStarts, instanceGoals)
