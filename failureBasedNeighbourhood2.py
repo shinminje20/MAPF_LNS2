@@ -94,6 +94,8 @@ def failureNeighbourhood(paths, n):
             for agent in remain:
                 if paths[randomNeighbour][-1] in paths_sets[agent]:
                     arr.append(agent)
+            if len(arr) == 0:
+                continue
             neighbourhood.append(arr[random.randrange(len(arr))])
     else:
         if len(As) == 0:

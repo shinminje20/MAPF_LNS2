@@ -3,6 +3,7 @@ import heapq
 from SIPPS import *
 from random import randrange
 
+
 def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, instanceGoals):
 	#randomize order of neighbourhood
     neighbourhood = priorityList(neighbourhood)
@@ -27,7 +28,7 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, inst
 
     soft_obstacles = {}
     for agent in neighbourhood:
-        #print("agent", agent)
+        print("agent", agent)
         agentStart = instanceStarts[agent] #coordinates are in (x, y), map indexing is in [y][x]
         agentGoal = instanceGoals[agent]
 
@@ -61,8 +62,8 @@ def add_constraints_from_path(constraint_table, path):
 
         #add edge constraint
         if (path[i], path[i-1]) not in constraint_table:
-            constraint_table[(path[i], path[i-1])] = set()
-        constraint_table[(path[i], path[i-1])].add(i)
+            constraint_table[(path[i], path[i-1])] = []
+        heapq.heappush(constraint_table[(path[i], path[i-1])], i)
 
     return constraint_table
 

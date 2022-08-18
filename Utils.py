@@ -18,7 +18,7 @@ def get_neighbors(curr_loc, my_map):
         next_loc = move(curr_loc, dir)
         
         # check is valid move
-        if not next_loc[0] < 0 or  next_loc[1] < 0 or  next_loc[0] > len(my_map) - 1 or  next_loc[1] > len(my_map[0]) - 1:
+        if next_loc[0] > 0 and next_loc[1] > 0 and next_loc[0] < len(my_map[0]) and next_loc[1] < len(my_map) and my_map[next_loc[1]][next_loc[0]] == True:
             next_locs.append(next_loc)
     
     return next_locs
@@ -104,7 +104,7 @@ def build_unsafe_intervals(soft_obstacles, hard_obstacles):
         low = None
         high = None
         
-        temp_times = copy(times)
+        temp_times = copy.copy(times)
         while temp_times:
             time = heapq.heappop(temp_times)
             
@@ -134,7 +134,7 @@ def build_unsafe_intervals(soft_obstacles, hard_obstacles):
         low = None
         high = None
         
-        temp_times = copy(times)
+        temp_times = copy.copy(times)
 
         while temp_times:
             time = heapq.heappop(temp_times)
@@ -190,7 +190,7 @@ def build_safe_interval_table(my_map, soft_obstacles, hard_obstacles):
     for i in range(len(my_map)):
         for j in range(len(my_map[i])):
             if my_map[i][j]:
-                locations.append((i, j))
+                locations.append((j, i))
 
     for v in locations:
         
@@ -203,18 +203,18 @@ def build_safe_interval_table(my_map, soft_obstacles, hard_obstacles):
         if v in soft_unsafe_intervals:
             soft_intervals = soft_unsafe_intervals[v]
 
+        safe_intervals = []
         if len(hard_intervals) != 0 or len(soft_intervals) != 0:
             unsafe_intervals = merge_intervals(hard_intervals, soft_intervals)
 
             time = 0
-            safe_intervals = []
             
             for (low, hi) in unsafe_intervals:
                 safe_intervals.append((time, low))
                 time = hi + 1
 
         else:
-            safe_intervals.append((0, sys.maxint))
+            safe_intervals.append((0, sys.maxsize))
         
         safe_interval_table[v] = safe_intervals
 
