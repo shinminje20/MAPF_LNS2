@@ -98,9 +98,9 @@ def failureNeighbourhood(paths, n):
         else:
             visitTimeList = whenVisitList(paths, As, paths[a1Id][0])
             sortedDic, sortedKeys = makeVisitTimeWithPathDic(visitTimeList, As)
-            for v in range(len(As)):
+            for v in range(len(Ag)):
                 neighbourhood.append(As[v])
-            for g in range(len(Ag)):
+            for g in range(len(sortedKeys)):
                 if len(neighbourhood) + len(sortedDic[sortedKeys[g]]) < n:
                     neighbourhood.append(sortedDic[sortedKeys[g]])
                 else:
