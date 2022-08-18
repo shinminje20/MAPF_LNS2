@@ -193,7 +193,7 @@ def get_c_val(node, closed_list, soft_obstacle):
 
     n_low = node['interval'][0]
     n_edge = (parent_node['loc'], node['loc'])
-    ce = 1 if n_edge in is_contain_edge(parent_node['loc'], node_loc, node_interval[0], soft_obstacle) else 0
+    ce = 1 if is_contain_edge(parent_node['loc'], node_loc, node_interval[0], soft_obstacle) else 0
 
     return parent_c_val + cv + ce
 
