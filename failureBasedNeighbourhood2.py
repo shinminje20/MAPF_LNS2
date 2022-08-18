@@ -76,8 +76,6 @@ def failureNeighbourhood(paths, n):
     print("Ag")
     print(Ag)
 
-    union = set(Ag).union(set(As))
-
     union = set(As).union(set(Ag))
 
     remain = set()
