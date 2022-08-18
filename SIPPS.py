@@ -160,12 +160,12 @@ def expand_node(my_map, curr_node, open_list, closed_list, safe_interval_table, 
         
         if (curr_loc, next_loc) in hard_obstacle:
             
-            low = get_earlieset_arrival_time((curr_loc, next_loc), low, high, hard_obstacle, None) # uncolide with hard_obstacle([curr_loc, next_loc])
+            low = get_earlieset_arrival_time2((curr_loc, next_loc), low, high, hard_obstacle, None) # uncolide with hard_obstacle([curr_loc, next_loc])
 
             if low is None:
                 continue
         
-        earliest_low = get_earlieset_arrival_time((curr_loc, next_loc), low, high, hard_obstacle, soft_obstacle) # uncolide with hard, soft obstacle
+        earliest_low = get_earlieset_arrival_time2((curr_loc, next_loc), low, high, hard_obstacle, soft_obstacle) # uncolide with hard, soft obstacle
 
         if earliest_low is not None and earliest_low > low:
             
