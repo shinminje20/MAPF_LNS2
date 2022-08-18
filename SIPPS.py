@@ -95,7 +95,7 @@ def pop_node(open_list):
     _, curr = heapq.heappop(open_list)
     return curr
 
-def get_earlieset_arrival_time(edge, low, high, hard_obstacle, soft_obstacle):
+def get_earlieset_arrival_time2(edge, low, high, hard_obstacle, soft_obstacle):
 
     new_low = low
 
@@ -114,6 +114,33 @@ def get_earlieset_arrival_time(edge, low, high, hard_obstacle, soft_obstacle):
             time = heapq.heappop(temp_times)
             if time == new_low:
                 new_low += 1
+
+    return new_low if new_low < high else None
+
+
+def get_earlieset_arrival_time(edge, low, high, hard_obstacle, soft_obstacle):
+
+    new_low = low
+
+    if soft_obstacle is not None:
+
+        temp_times = copy(hard_obstacle[edge])
+
+        while len(temp_times) > 0:
+            
+            time = heapq.heappop(temp_times)
+
+            if time == new_low:
+                new_low += 1
+        
+        temp_times = copy(soft_obstacle[edge])
+
+        while len(temp_times) > 0:
+
+    else:
+        temp_times = copy(hard_obstacle[edge])
+
+        while len(temp_times) > 0:
 
     return new_low if new_low < high else None
 
@@ -162,7 +189,7 @@ def is_contain_obstacle(node_loc, interval, soft_obstacle):
     if node_loc in soft_obstacle:
         temp_times = copy(soft_obstacle[node_loc])
 
-        while temp_times:
+        while len(temp_times) > 0:
             time = heapq.heappop(temp_times)
             if interval[0] <= time and time < interval[1]:
                 return True
@@ -175,7 +202,7 @@ def is_contain_edge(parent_loc, node_loc, n_low, soft_obstacle):
 
         temp_times = copy(soft_obstacle[(parent_loc, node_loc)])
 
-        while temp_times:
+        while len(temp_times) > 0:
             time = heapq.heappop(temp_times)
             if time == n_low:
                 return True
@@ -195,15 +222,19 @@ def get_c_val(node, closed_list, soft_obstacle):
 
     return parent_c_val + cv + ce
 
-def get_c_future(curr_loc, timestep, constraint_table):
-    c_val = 0
-    if len(constraint_table[curr_loc]) > timestep:
-        t = timestep + 1
-        while t < len(constraint_table[curr_loc]):
-            c_val += len(constraint_table[curr_loc][t])
-            t += 1
+def get_c_future(curr_loc, soft_obstacle, n_low):
+    c_future = 0
     
-    return c_val
+    if curr_loc in soft_obstacle:
+        temp_times = copy(soft_obstacle[curr_loc])
+        
+        while len(temp_times) > 0:
+            time = heapq.heappop(temp_times)
+            if time > n_low:
+                c_future = len(temp_times) + 1    # Since all of rest of times in temp_times will be greater than n_low from now, 
+                break                             # thus len(temp_times) + 1 (+1 for counting popped time just now).
+    
+    return c_future
 
 def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):    
 
@@ -233,12 +264,13 @@ def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):
             return get_path(curr)
 
         if curr['loc'] == goal_loc and curr['interval'][0] >= lower_bound_timestep:
-            c_future = get_c_future(curr['loc'], )
+            c_future = get_c_future(curr['loc'], soft_obstacle, curr['interval'][0])
             
             if c_future == 0:
                 return get_path(curr)
 
             updated_node = curr.copy()
+            updated_node['is_goal'] = True
             updated_node['c_val'] = curr['c_val'] + c_future
             insert_node(updated_node, open_list, closed_list, h_values, soft_obstacle)
 
