@@ -1,5 +1,7 @@
 from Utils import *
 import heapq
+from random import randrange
+from SIPPS import *
 
 def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, instanceGoals):
 	#randomize order of neighbourhood
@@ -25,12 +27,14 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, inst
 
     soft_obstacles = {}
     for agent in neighbourhood:
+        #print("agent", agent)
         agentStart = instanceStarts[agent] #coordinates are in (x, y), map indexing is in [y][x]
         agentGoal = instanceGoals[agent]
 
         #build heuristics table
-        h_values = compute_heuristics(instanceMap, agentGoal)
-        agentPath = sipps(instanceMap, agentStart, agentGoal, h_values, agent, hard_obstacles, soft_obstacles)
+        h_values = compute_heuristics2(instanceMap, agentGoal)
+        #print(h_values)
+        agentPath = sipps(instanceMap, agentStart, agentGoal, h_values, hard_obstacles, soft_obstacles)
         newPaths.append(agentPath)
         if agentPath != None:
             add_constraints_from_path(soft_obstacles, agentPath)
@@ -47,13 +51,13 @@ def add_constraints_from_path(constraint_table, path):
     #add vertex constraint for time 0
     if path[0] not in constraint_table:
         constraint_table[path[0]] = []
-    constraint_table[path[0]].heappush(0)
+    heapq.heappush(constraint_table[path[0]], 0)
 
     for i in range(1, len(path)):
         #add vertex constraint
         if path[i] not in constraint_table:
             constraint_table[path[i]] = []
-        constraint_table[path[i]].heappush(i)
+        heapq.heappush(constraint_table[path[i]], i)
 
         #add edge constraint
         if (path[i], path[i-1]) not in constraint_table:

@@ -68,16 +68,17 @@ def failureNeighbourhood(paths, n):
         if paths[i][-1] in path_sets[a1Id]:
             Ag.append(i)
 
+    union = set(As).union(set(Ag))
+
     remain = set()
     for i in range(len(paths)):
         if i not in union:
             remain.add(i)
 
-    if len(As) + len(Ag) == 0:
+    if len(union) == 0:
         return neighbourhood
-    elif len(As) + len(Ag) < n-1:
-        neighbourhood.extend(As)
-        neighbourhood.extend(Ag)
+    elif len(union) < n-1:
+        neighbourhood.extend(list(union))
         diff = n - len(neighbourhood)
         for j in range(diff):
             randomNeighbour = random.randrange(len(neighbourhood))

@@ -22,6 +22,7 @@ def get_neighbors(curr_loc, my_map):
     
     return next_locs
 
+
 def compute_heuristics(my_map, goal):
     # Use Dijkstra to build a shortest-path tree rooted at the goal location
     open_list = []
@@ -29,15 +30,18 @@ def compute_heuristics(my_map, goal):
     root = {'loc': goal, 'cost': 0}
     heapq.heappush(open_list, (root['cost'], goal, root))
     closed_list[goal] = root
+    i = 0
     while len(open_list) > 0:
+        i += 1
         (cost, loc, curr) = heapq.heappop(open_list)
+        #print(cost, loc, curr)
         for dir in range(5):
             child_loc = move(loc, dir)
             child_cost = cost + 1
-            if child_loc[0] < 0 or child_loc[0] >= len(my_map) \
-               or child_loc[1] < 0 or child_loc[1] >= len(my_map[0]):
-               continue
-            if my_map[child_loc[0]][child_loc[1]]:
+            if child_loc[0] < 0 or child_loc[0] >= len(my_map[0]) \
+                or child_loc[1] < 0 or child_loc[1] >= len(my_map):
+                continue
+            if not my_map[child_loc[1]][child_loc[0]]:
                 continue
             child = {'loc': child_loc, 'cost': child_cost}
             if child_loc in closed_list:
@@ -55,6 +59,7 @@ def compute_heuristics(my_map, goal):
     for loc, node in closed_list.items():
         h_values[loc] = node['cost']
     return h_values
+
 
 def get_location(path, time):
     if time < 0:
