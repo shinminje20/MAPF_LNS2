@@ -18,7 +18,7 @@ def get_neighbors(curr_loc, my_map):
         next_loc = move(curr_loc, dir)
         
         # check is valid move
-        if next_loc[0] > 0 and next_loc[1] > 0 and next_loc[0] < len(my_map[0]) and next_loc[1] < len(my_map) and my_map[next_loc[1]][next_loc[0]] == True:
+        if next_loc[0] >= 0 and next_loc[1] >= 0 and next_loc[0] < len(my_map[0]) and next_loc[1] < len(my_map) and my_map[next_loc[1]][next_loc[0]] == True:
             next_locs.append(next_loc)
     
     return next_locs

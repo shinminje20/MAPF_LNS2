@@ -153,14 +153,13 @@ def get_earlieset_arrival_time(edge, low, high, hard_obstacle, soft_obstacle):
     return new_low if new_low < high else None
 
 def expand_node(my_map, curr_node, open_list, closed_list, safe_interval_table, hard_obstacle, soft_obstacle, h_values, count_tie_break):
-    #print("debug")
     valid_neighbors = []
     curr_loc = curr_node['loc']
     node_low = curr_node['interval'][0]
     node_high = curr_node['interval'][1]
     
     valid_neighbors = get_valid_nodes(my_map, curr_loc, node_low, node_high, safe_interval_table)
-
+    #print(valid_neighbors)
     # Algorithm 2 line 2-3
     for (next_loc, interval_id) in valid_neighbors:
         low = safe_interval_table[next_loc][interval_id][0]
@@ -280,7 +279,7 @@ def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):
             updated_node = curr.copy()
             updated_node['is_goal'] = True
             updated_node['c_val'] = curr['c_val'] + c_future
-            insert_node(updated_node, open_list, closed_list, h_values, soft_obstacle)
+            insert_node(updated_node, open_list, closed_list, h_values, soft_obstacle, count_tie_break)
 
         expand_node(my_map, curr, open_list, closed_list, safe_interval_table, hard_obstacle, soft_obstacle, h_values, count_tie_break)
 
