@@ -107,3 +107,5 @@ def failureNeighbourhood(paths, n):
                     count = n - len(neighbourhood)
                     for i in range(count):
                         neighbourhood.append(sortedDic[sortedKeys[g]][i])
+
+    return neighbourhood
