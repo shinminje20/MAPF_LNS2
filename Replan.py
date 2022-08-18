@@ -18,7 +18,7 @@ def selectNeighbour(paths, neighbourhood_kind, numNeighbourhood, width, height, 
             paths, numNeighbourhood, width, height, instanceMap)
     elif neighbourhood_kind == 1:
         # failure
-        neighbourhood = faulureNeighbourhood(paths, numNeighbourhood)
+        neighbourhood = failureNeighbourhood(paths, numNeighbourhood)
     else:
         # random
         neighbourhood = randomNeighbourhood(paths, numNeighbourhood)
@@ -45,7 +45,6 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, ALNS_weight):
     newNeighbourhood = prioritized_planning(
         paths, neighbourhoodIndex_inPath, instanceMap, neighbourhood)
 
-
     newPaths = paths
     for index in neighbourhoodIndex_inPath:
         # newPaths[index] = None
@@ -63,8 +62,8 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, ALNS_weight):
 def LNS2(numNeighbourhood, width, height, instanceMap,):
     newPath = prioritized_planning([], list(
         range(0, len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
-    
-    numCp = sum(deg(firstPath))
+
+    numCp = sum(deg(newPath))
     if (numCp == 0):
         return newPath
 

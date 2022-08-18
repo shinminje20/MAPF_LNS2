@@ -93,7 +93,7 @@ def makeVisitTimeWithPathDic(visitTimeList, As):
 # n=the number of neighbour
 # path, example. path = [   [(1,1),(2,2)], [(1,1),(2,2)] ...]
 def failureNeighbourhood(path, n):
-    pathCopy = path
+    pathCopy = path.copy()
 
     # add a1 to neighbour
     # a1 = [(1,1),(1,2)]
@@ -101,7 +101,9 @@ def failureNeighbourhood(path, n):
     a1Id = findA1(degList)
     a1 = pathCopy[a1Id]
     neighbour = []
+    neighbourIndex = []
     neighbour.append(a1)
+    neighbourIndex.append(path.index(a1))
     pathCopy.remove(a1)
 
     As = []
@@ -119,6 +121,7 @@ def failureNeighbourhood(path, n):
 
     union = makeUnion(As, Ag)
 
+    # paths which is not selected as neighbour
     remain = difference(pathCopy, union)
 
     if len(union) == 0:
@@ -126,24 +129,33 @@ def failureNeighbourhood(path, n):
     elif len(union) < n-1:
         for i in range(0, len(union), 1):
             neighbour.append(union[i])
+            neighbourIndex.append(path.index(union[i]))
         diff = n-len(neighbour)
         for j in range(0, diff, 1):
-            randomNeighbour = neighbour[random.randint(0, len(neighbour)-1)]
+            randomNeighbour = neighbour[random.randint(
+                0, len(neighbour)-1)]  # a(j) from neighbour
             arr = []
             for k in range(0, len(remain), 1):
                 if (randomNeighbour[len(randomNeighbour)-1] in remain[k]):
                     arr.append(remain[k])
-            neighbour.append(arr[random.randint(0, len(arr)-1)])
+            if (len(arr) == 0):
+                continue
+            randomIndex = random.randint(
+                0, len(arr)-1)
+            neighbour.append(arr[randomIndex])
+            neighbourIndex.append(path.index(arr[randomIndex]))
     else:
         if (len(As) == 0):
             for x in range(0, n-1, 1):
                 neighbour.append(Ag[x])
+                neighbourIndex.append(path.index(Ag[x]))
         elif(len(Ag) >= n-1):
             visitTimeList = whenVisitList(As, a1[0])
             minIndex = visitTimeList.index(min(visitTimeList))
             neighbour.append(As[minIndex])
             for x in range(0, n-2, 1):
                 neighbour.append(Ag[x])
+                neighbourIndex.append(path.index(Ag(x)))
 
         else:
             visitTimeList = whenVisitList(As, a1[0])
@@ -152,6 +164,7 @@ def failureNeighbourhood(path, n):
                 neighbour.append(Ag[v])
             for g in range(0, n-1-len(Ag), 1):
                 neighbour.append(sortedDic[sortedKeys[0]])
+                neighbourIndex.append(path.index(sortedDic[sortedKeys[0]]))
                 del sortedDic[sortedKeys[0]]
 
-    return neighbour
+    return list(set(neighbourIndex))
