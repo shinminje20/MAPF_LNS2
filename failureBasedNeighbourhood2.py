@@ -43,7 +43,7 @@ def makeVisitTimeWithPathDic(visitTimeList, As):
     sortedkeys = list(dic.keys()).sort()
     return dic, sortedkeys
 
-def failureNeighbourhood2(paths, n):
+def failureNeighbourhood(paths, n):
     paths_sets = []
     for i in range(len(paths)):
         paths_sets.append(set())
