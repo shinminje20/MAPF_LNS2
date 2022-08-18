@@ -1,5 +1,6 @@
 import random
 from LNSUtil import *
+import sys
 
 def findA1(degList):
     probList = []
@@ -36,11 +37,12 @@ def minVisitTimeAgent(paths, agents, goal):
 def makeVisitTimeWithPathDic(visitTimeList, As):
     # sorted one
     dic = {}
-    for i in range(visitTimeList):
+    for i in range(len(visitTimeList)):
         if visitTimeList[i] not in dic:
             dic[visitTimeList[i]] = []
         dic[visitTimeList[i]].append(As[i])
-    sortedkeys = list(dic.keys()).sort()
+    sortedkeys = list(dic.keys())
+    sortedkeys.sort()
     return dic, sortedkeys
 
 def failureNeighbourhood(paths, n):
@@ -50,34 +52,32 @@ def failureNeighbourhood(paths, n):
         for pos in paths[i]:
             paths_sets[i].add(pos)
 
-    degList = deg(pathCopy)
+    degList = deg(paths)
     a1Id = findA1(degList)
 
     neighbourhood = [a1Id]
 
-    As = set()
+    As = []
     a1Start = paths[a1Id][0]
-    for i in range(len(path_sets)):
-        if a1Start in path_sets[i]:
-            As.add(i)
+    for i in range(len(paths_sets)):
+        if a1Start in paths_sets[i]:
+            As.append(i)
 
-    Ag = set()
-    for i in range(len(path_sets)):
+    Ag = []
+    for i in range(len(paths_sets)):
         if paths[i][-1] in path_sets[a1Id]:
-            Ag.add(i)
-
-    union = As.union(Ag)
+            Ag.append(i)
 
     remain = set()
     for i in range(len(paths)):
         if i not in union:
             remain.add(i)
 
-    if len(union) == 0:
+    if len(As) + len(Ag) == 0:
         return neighbourhood
-    elif len(union) < n-1:
-        for agent in union:
-            neighbourhood.append(agent)
+    elif len(As) + len(Ag) < n-1:
+        neighbourhood.extend(As)
+        neighbourhood.extend(Ag)
         diff = n - len(neighbourhood)
         for j in range(diff):
             randomNeighbour = random.randrange(len(neighbourhood))
@@ -99,7 +99,7 @@ def failureNeighbourhood(paths, n):
             visitTimeList = whenVisitList(paths, As, paths[a1Id][0])
             sortedDic, sortedKeys = makeVisitTimeWithPathDic(visitTimeList, As)
             for v in range(len(Ag)):
-                neighbourhood.append(As[v])
+                neighbourhood.append(Ag[v])
             for g in range(len(sortedKeys)):
                 if len(neighbourhood) + len(sortedDic[sortedKeys[g]]) < n:
                     neighbourhood.append(sortedDic[sortedKeys[g]])
