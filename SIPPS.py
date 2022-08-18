@@ -245,7 +245,7 @@ def get_c_future(curr_loc, soft_obstacle, n_low):
 
 def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):    
 
-    safe_interval_table = build_safe_interval_table(my_map, soft_obstacle, hard_obstacle)  #my_map is avaialble paths excluding walls
+    safe_interval_table = build_safe_interval_table(my_map, hard_obstacle)  #my_map is avaialble paths excluding walls
     #print(safe_interval_table)
 
     temp1 = h_values[start_loc]
