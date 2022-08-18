@@ -199,14 +199,15 @@ def get_c_val(node, closed_list, soft_obstacle):
 
 def get_c_future(curr_loc, soft_obstacle, n_low):
     c_future = 0
-
-    temp_times = copy(soft_obstacle[curr_loc])
     
-    while len(temp_times) > 0:
-        time = heapq.heappop(temp_times)
-        if time > n_low:
-            c_future = len(temp_times) + 1    # Since all of rest of times in temp_times will be greater than n_low from now, 
-            break                             # thus len(temp_times) + 1 (+1 for counting popped time just now).
+    if curr_loc in soft_obstacle:
+        temp_times = copy(soft_obstacle[curr_loc])
+        
+        while len(temp_times) > 0:
+            time = heapq.heappop(temp_times)
+            if time > n_low:
+                c_future = len(temp_times) + 1    # Since all of rest of times in temp_times will be greater than n_low from now, 
+                break                             # thus len(temp_times) + 1 (+1 for counting popped time just now).
     
     return c_future
 
