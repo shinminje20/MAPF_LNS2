@@ -9,13 +9,13 @@ from prioritizedPlanning import *
 from LNSUtil import *
 
 
-def selectNeighbour(paths, neighbourhood_kind, numNeighbourhood, width, height, instanceMap):
+def selectNeighbour(paths, neighbourhood_method, numNeighbourhood, width, height, instanceMap):
     neighbourhood = []
-    if neighbourhood_kind == 0:
+    if neighbourhood_method == 0:
         # collision
         neighbourhood = collisionNeighbourhood(
             paths, numNeighbourhood, width, height, instanceMap)
-    elif neighbourhood_kind == 1:
+    elif neighbourhood_method == 1:
         # failure
         neighbourhood = failureNeighbourhood(paths, numNeighbourhood)
     else:
@@ -68,16 +68,22 @@ def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceG
     while numCp != 0:
         previousCP = numCp
         newPath = replan(newPath, numNeighbourhood, width,
-                         height, instanceMap, ALNS_weight)
+                         height, instanceMap, instanceStarts, instanceGoals, ALNS_weight)
         numCp = sum(deg(newPath))
         ALNS_weight = updateWeight(ALNS_weight, ALNS_r, previousCP, numCp)
 
     return newPath
 
-
 if __name__ == "__main__":
-    numNeighbourhood = 2
+    numNeighbourhood = 5
+    numAgent = 10
+    # instanceMap, instanceStarts, instanceGoals = loadScen(
+    #     "empty-8-8-even-1.scen", numAgent)
     instanceMap, instanceStarts, instanceGoals = loadScen(
-        "empty-8-8-even-1.scen", 5)
-    path = LNS2(numNeighbourhood, 8, 8, instanceMap,
+        'room-64-64-16-even-1.scen', numAgent)
+    paths = LNS2(numNeighbourhood, 64, 64, instanceMap,
                 instanceStarts, instanceGoals)
+
+    for path in paths:
+        print(path)
+
