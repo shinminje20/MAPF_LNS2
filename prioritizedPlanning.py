@@ -1,7 +1,8 @@
 from Utils import *
 import heapq
-from random import randrange
 from SIPPS import *
+from random import randrange
+
 
 def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, instanceGoals):
 	#randomize order of neighbourhood
@@ -32,7 +33,11 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, inst
         agentGoal = instanceGoals[agent]
 
         #build heuristics table
+<<<<<<< HEAD
         h_values = compute_heuristics2(instanceMap, agentGoal)
+=======
+        h_values = compute_heuristics(instanceMap, agentGoal)
+>>>>>>> main
         #print(h_values)
         agentPath = sipps(instanceMap, agentStart, agentGoal, h_values, hard_obstacles, soft_obstacles)
         newPaths.append(agentPath)
