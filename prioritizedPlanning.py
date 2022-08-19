@@ -28,7 +28,7 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, inst
 
     soft_obstacles = {}
     for agent in neighbourhood:
-        print("|||||| agent", agent)
+        #print("|||||| agent", agent)
         #print("soft_obstacles", soft_obstacles)
         #print(soft_obstacles)
         agentStart = instanceStarts[agent] #coordinates are in (x, y), map indexing is in [y][x]
@@ -40,14 +40,14 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, inst
         agentPath = sipps(instanceMap, agentStart, agentGoal, h_values, hard_obstacles, soft_obstacles)
         newPaths.append(agentPath)
         if agentPath != None:
-            print("path length", len(agentPath))
+            #print("path length", len(agentPath))
             add_constraints_from_path(soft_obstacles, agentPath)
         
 
     #for i in range(len(neighbourhood)):
     #    paths[neighbourhood[i]] = newPaths[i]
 
-    return newPaths
+    return neighbourhood, newPaths
     #newPaths[i] corresponds to agent at neighbourhood[i]
 
 

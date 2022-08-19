@@ -33,14 +33,37 @@ N = 3
 width = 10
 height = 5
 
+testpaths = [[], [], []]
+neighbourhood = [0, 1, 2]
+neighbourhood, newtestpaths = prioritized_planning(testpaths, neighbourhood, instanceMap, instanceStarts, instanceGoals)
+
+#print(neighbourhood)
+#print(newtestpaths)
+
+for i in range(len(neighbourhood)):
+	testpaths[neighbourhood[i]] = newtestpaths[i]
+
+for a in testpaths:
+	print(a)
+
+
+
+
+
 collisions = len(degID(paths))
 #print(collisions)
 
 ALNS_weight = [1, 1, 1]
-while collisions > 0:
-    newPath, collisions = replan(paths, 2, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, collisions)
+#while collisions > 0:
+#    newPath, collisions = replan(paths, 2, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, collisions)
 
 #solution = LNS2(2, width, height, instanceMap, instanceStarts, instanceGoals)
+
+
+
+
+
+
 
 
 

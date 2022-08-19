@@ -92,7 +92,7 @@ def get_path(goal_node):
 #                                                   'location2': {
 #                                                                   [(low, high), (low2, high2), (low3, high3)...],    
 
-def build_safe_interval_table(my_map, hard_obstacles):
+def build_safe_interval_table(my_map, hard_obstacles, soft_obstacles):
 
     safe_interval_table = dict()
     locations = []
@@ -102,21 +102,73 @@ def build_safe_interval_table(my_map, hard_obstacles):
                 locations.append((j, i))
 
     for v in locations:
-        if v not in hard_obstacles:
-            safe_interval_table[v] = [(0, sys.maxsize)]
-            continue
-        obstacle_times = copy.copy(hard_obstacles[v])
-        safe_intervals = []
-        low = 0
-        #print("debug1")
-        while len(obstacle_times) > 0:
-            #print("debug2")
-            high = heapq.heappop(obstacle_times)
-            if high > low:
-                safe_intervals.append((low, high))
-            low = high + 1
-        safe_intervals.append((low, sys.maxsize))
+        intervals = []
 
-        safe_interval_table[v] = safe_intervals
+        hard_times = []
+        if v in hard_obstacles:
+            hard_times = copy.copy(hard_obstacles[v])
+        soft_times = []
+        if v in soft_obstacles:
+            soft_times = copy.copy(soft_obstacles[v])
+
+        next_time = 0
+        next_time_from = 0
+        start_from = 0 #0:clear, 1:soft, 2:hard
+        interval_low = 0 
+        interval_top = 0 #include top time in interval, ie. [low, top] == [low, top+1) == [low, high)
+
+        while len(hard_times) + len(soft_times) > 0:
+            #get next time and from which heap
+            if len(hard_times) == 0:
+                next_time = heapq.heappop(soft_times)
+                next_time_from = 1
+            elif len(soft_times) == 0:
+                next_time = heapq.heappop(hard_times)
+                next_time_from = 2
+            elif soft_times[0] < hard_times[0]:
+                next_time = heapq.heappop(soft_times)
+                next_time_from = 1
+            else:
+                next_time = heapq.heappop(hard_times)
+                next_time_from = 2
+
+
+            if next_time_from == start_from:
+
+                if next_time == interval_top + 1: #direct interval continuation
+                    interval_top = next_time
+                    continue #skip next interval start setup
+
+                else: #interval gap, obstacle interval ended and intermediate empty interval inferred
+                    #if soft interval add [low, top+1), if hard interval do nothing
+                    if start_from == 1:
+                        intervals.append((interval_low, interval_top+1, 1))
+                    
+                    #add empty interval
+                    intervals.append((interval_top+1, next_time, 0))
+
+            else: #next_time_from != start_from, automatic interval demarcation
+                if start_from == 0: #only happens on first loop iteration setup
+                    if next_time != 0: #[0, next_time) is clear, add clear interval, set up interval tracking variables
+                        intervals.append((0, next_time, 0))    
+
+                if start_from == 1: #after first loop
+                    intervals.append((interval_low, interval_top+1, start_from))
+                
+                if next_time > interval_top + 1: #intermediate clear interval
+                    intervals.append((interval_top+1, next_time, 0))
+
+            # next interval start setup
+            start_from = next_time_from
+            interval_low = next_time
+            interval_top = next_time
+
+        #add interval for last time sequence if soft
+        if start_from == 1:
+            intervals.append((interval_low, interval_top+1, 1))
+        #add interval for last clear to infinity
+        intervals.append((interval_top+1, sys.maxsize, 0))
+
+        safe_interval_table[v] = intervals
 
     return safe_interval_table

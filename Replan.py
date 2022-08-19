@@ -15,18 +15,18 @@ def selectNeighbour(paths, neighbourhood_method, numNeighbourhood, width, height
     method = 0
     if neighbourhood_method == 0:
         # collision
-        print("\ncollisionNeighbourhood")
+        #print("\ncollisionNeighbourhood")
         method = 0
         neighbourhood = collisionNeighbourhood(
             paths, numNeighbourhood, width, height, instanceMap)
     elif neighbourhood_method == 1:
         # failure
-        print("\nfailureNeighbourhood")
+        #print("\nfailureNeighbourhood")
         method = 1
         neighbourhood = failureNeighbourhood(paths, numNeighbourhood)
     else:
         # random
-        print("\nrandomNeighbourhood")
+        #print("\nrandomNeighbourhood")
         method = 2
         neighbourhood = randomNeighbourhood(paths, numNeighbourhood)
 
@@ -45,7 +45,7 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
         paths, neighbourhood_kind, numNeighbourhood, width, height, instanceMap)
 
     # newNeighbourhood is P+ in the paper (list of paths)
-    newPaths = prioritized_planning(
+    neighbourhood, newPaths = prioritized_planning(
         paths, neighbourhood, instanceMap, instanceStarts, instanceGoals)
 
     #print(neighbourhood)
@@ -60,45 +60,49 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
     # sum of collision pair of all agents
     numCp_newPathsSolution = sum(deg(newPathsSolution))
 
-    print(degID(newPathsSolution))
+    #print(degID(newPathsSolution))
 
     ALNS_weight = updateWeight(ALNS_weight, ALNS_r, prevCP, numCp_newPathsSolution, method)
 
 
     if (prevCP >= numCp_newPathsSolution):
-        print("new plan", numCp_newPathsSolution)
+        #print("new plan", numCp_newPathsSolution)
         return newPathsSolution, numCp_newPathsSolution
 
-    print("old plan", prevCP)
+    #print("old plan", prevCP)
     return paths, prevCP
 
 
 def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
-    newPath = prioritized_planning([], list(range(len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
+    paths = list(range(len(instanceGoals)))
+    neighbourhood, newPaths = prioritized_planning([], list(range(len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
+    for i in range(len(neighbourhood)):
+        paths[neighbourhood[i]] = newPaths[i]
 
+    '''
     pathCosts = 0
     for i in range(len(newPath)):
-        print("agent", i, newPath[i])
+        #print("agent", i, newPath[i])
         pathCosts += len(newPath[i])
-
-    print(pathCosts)
-    print(degID(newPath))
+    #print(pathCosts)
+    #print(degID(newPath))
+    '''
 
     numCp = 0
-    numCp = sum(deg(newPath))
+    numCp = sum(deg(paths))
     if (numCp == 0):
-        return newPath
+        return paths
 
     ALNS_weight = [1, 1, 1]
     ALNS_r = 0.1
 
     while numCp != 0:
-        newPath, numCp = replan(newPath, numNeighbourhood, width,
+        paths, numCp = replan(paths, numNeighbourhood, width,
                          height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp)
         #numCp = sum(deg(newPath))
         #ALNS_weight = updateWeight(ALNS_weight, ALNS_r, previousCP, numCp)
 
-    return newPath
+    return paths
 
 if __name__ == "__main__":
     numNeighbourhood = 5
@@ -110,6 +114,6 @@ if __name__ == "__main__":
     paths = LNS2(numNeighbourhood, len(instanceMap[0]), len(instanceMap), instanceMap,
                 instanceStarts, instanceGoals)
 
-    #for path in paths:
-    #    print(path)
+    for path in paths:
+        print(path)
 
