@@ -20,8 +20,8 @@ for i in range(len(neighbourhood)):
 collisions = sum(deg(paths))
 print('collisions', collisions)
 
-#for path in newPaths:
-#	print(path)
+for path in newPaths:
+	print(path)
 
 
 

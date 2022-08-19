@@ -1,6 +1,6 @@
 from Utils import *
 import heapq
-from SIPPS import *
+from SIPPS2 import *
 from random import randrange
 
 
