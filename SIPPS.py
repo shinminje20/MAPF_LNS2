@@ -53,7 +53,7 @@ def insert_node(node, open_list, closed_list, h_values, soft_obstacle, count_tie
     g_val = node['parent']['g_val'] + 1
     h_val = h_values[node['loc']]
     f_val = g_val + h_val
-    c_val = get_c_val(node, closed_list, soft_obstacle)
+    c_val = get_c_val(node, soft_obstacle)
     
     n_low = node['interval'][0]
     n_high = node['interval'][1]
@@ -72,7 +72,7 @@ def insert_node(node, open_list, closed_list, h_values, soft_obstacle, count_tie
         if i_low <= n_low and i_c_val <= c_val:
             return
         
-        elif n_low <= i_low and c_val <= i_c_val:
+        elif n_low <= i_low and c_val <= i_c_val: #node is better than previously added node
             #delete i_node from either open_list, closed_list
             closed_list = [ x for x in closed_list if x[1] == i_node ]
 
@@ -107,13 +107,14 @@ def get_earlieset_arrival_time2(edge, low, high, hard_obstacle, soft_obstacle):
             if time == new_low:
                 new_low += 1
 
-    if edge in soft_obstacle:
-        temp_times = []
-        temp_times.extend(soft_obstacle[edge])
-        while len(temp_times) > 0:
-            time = heapq.heappop(temp_times)
-            if time == new_low:
-                new_low += 1
+    if soft_obstacle != None:
+        if edge in soft_obstacle:
+            temp_times = []
+            temp_times.extend(soft_obstacle[edge])
+            while len(temp_times) > 0:
+                time = heapq.heappop(temp_times)
+                if time == new_low:
+                    new_low += 1
 
     return new_low if new_low < high else None
 
@@ -216,7 +217,7 @@ def is_contain_edge(parent_loc, node_loc, n_low, soft_obstacle):
     
     return False
 
-def get_c_val(node, closed_list, soft_obstacle):
+def get_c_val(node, soft_obstacle):
     parent_node = node['parent']
     parent_c_val = parent_node['c_val']
     node_interval = node['interval']
@@ -258,9 +259,11 @@ def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):
         lower_bound_timestep = max(hard_obstacle[goal_loc]) + 1
 
     open_list = []
+    visited_list = {}
     count_tie_break = {}
     count_tie_break[(0, 0, 0)] = -1 #c_val, g_val
     heapq.heappush(open_list, ((0, 0, 0, 0), root))
+    visited_list[(root['loc'], root['id'], root['is_goal'])] = root
 
     closed_list = []
     count = 0
@@ -299,6 +302,7 @@ def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):
         
 
     # If there is no solution, return None to track of agents who does not have solutions when finding initial paths
+    print("none")
     return None
 
 #SIPPS needs to compare based on f(n), and take the solution with lowest c_val?

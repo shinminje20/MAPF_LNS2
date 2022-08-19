@@ -1,12 +1,12 @@
 from loadscen import *
 from prioritizedPlanning import *
 from Utils import *
+from LNSUtil import *
 import heapq
 
 
-numAgents = 10
-#instanceMap, instanceStarts, instanceGoals = loadScen('Berlin_1_256-even-1.scen', numAgents)
-instanceMap, instanceStarts, instanceGoals = loadScen('empty-8-8-even-1.scen', numAgents)
+numAgents = 3
+instanceMap, instanceStarts, instanceGoals = loadScen('room-64-64-16-even-1.scen', numAgents)
 
 
 #run PP for initial plan
@@ -17,9 +17,11 @@ newPaths = prioritized_planning(paths, neighbourhood, instanceMap, instanceStart
 for i in range(len(neighbourhood)):
 	paths[neighbourhood[i]] = newPaths[i]
 
+collisions = sum(deg(paths))
+print('collisions', collisions)
 
-for path in newPaths:
-	print(path)
+#for path in newPaths:
+#	print(path)
 
 
 
