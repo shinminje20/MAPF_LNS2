@@ -7,12 +7,12 @@ from LNSUtil import *
 def randomNeighbourhood(paths, N):
     pathCopy = paths
     degList = deg(pathCopy)
-    print("degList" + str(degList))
+    #print("degList" + str(degList))
 
     probList = []
     for i in range(0, len(degList), 1):
         probList.append(degList[i] + 1)
-    print(probList)
+    #print(probList)
 
     agentNumbersList = list(range(len(paths)))
     neighbourhood = set()

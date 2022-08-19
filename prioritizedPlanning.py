@@ -28,7 +28,7 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, inst
 
     soft_obstacles = {}
     for agent in neighbourhood:
-        print("agent", agent)
+        #print("agent", agent)
         #print(soft_obstacles)
         agentStart = instanceStarts[agent] #coordinates are in (x, y), map indexing is in [y][x]
         agentGoal = instanceGoals[agent]

@@ -15,18 +15,18 @@ def selectNeighbour(paths, neighbourhood_method, numNeighbourhood, width, height
     method = 0
     if neighbourhood_method == 0:
         # collision
-        print("collisionNeighbourhood")
+        #print("collisionNeighbourhood")
         method = 0
         neighbourhood = collisionNeighbourhood(
             paths, numNeighbourhood, width, height, instanceMap)
     elif neighbourhood_method == 1:
         # failure
-        print("failureNeighbourhood")
+        #print("failureNeighbourhood")
         method = 1
         neighbourhood = failureNeighbourhood(paths, numNeighbourhood)
     else:
         # random
-        print("randomNeighbourhood")
+        #print("randomNeighbourhood")
         method = 2
         neighbourhood = randomNeighbourhood(paths, numNeighbourhood)
 
@@ -61,16 +61,23 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
 
 
     if (prevCP >= numCp_newPathsSolution):
-        print(numCp_newPathsSolution)
+        print("new plan", numCp_newPathsSolution)
         return newPathsSolution, numCp_newPathsSolution
 
-    print(prevCP)
+    print("old plan", prevCP)
     return paths, prevCP
 
 
 def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
     newPath = prioritized_planning([], list(
         range(0, len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
+
+    pathCosts = 0
+    for path in newPath:
+        print(path)
+        pathCosts += len(path)
+
+    print(pathCosts)
 
     numCp = 0
     numCp = sum(deg(newPath))
@@ -94,8 +101,8 @@ if __name__ == "__main__":
     # instanceMap, instanceStarts, instanceGoals = loadScen(
     #     "empty-8-8-even-1.scen", numAgent)
     instanceMap, instanceStarts, instanceGoals = loadScen(
-        'room-64-64-16-even-1.scen', numAgent)
-    paths = LNS2(numNeighbourhood, 64, 64, instanceMap,
+        'room-32-32-4-even-1.scen', numAgent)
+    paths = LNS2(numNeighbourhood, len(instanceMap[0]), len(instanceMap), instanceMap,
                 instanceStarts, instanceGoals)
 
     #for path in paths:

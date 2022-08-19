@@ -3,7 +3,7 @@ import time
 import heapq
 
 def collisionNeighbourhood(paths, N, width, height, instanceMap):
-	print("colneigh")
+	#print("colneigh")
 	#organize paths into lookup dictionary
 	timepos = {} # {y, x, t}: [agents...]
 	numAgents = len(paths)
@@ -124,7 +124,7 @@ def collisionNeighbourhood(paths, N, width, height, instanceMap):
 								break
 		'''
 	elif len(connectedComp) >= N:
-		print("connectedComp subset")
+		#print("connectedComp subset")
 		revisited = {}
 		revisited[connectedComp[0]] = 1
 		neighbourhood.append(connectedComp[0])

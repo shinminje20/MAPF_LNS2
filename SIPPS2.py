@@ -74,7 +74,9 @@ def insert_node(node, open_list, key_heap, visited_list, h_values, soft_obstacle
             if n_low < i_low:
                 n_high = i_low
             else:
-                visited_list[node_sig][i_node_sig_2][0]['interval'][1] = n_low
+                updated_i_node = copy.copy(visited_list[node_sig][i_node_sig_2][0])
+                updated_i_node['interval'] = (updated_i_node['interval'][0], n_low)
+                visited_list[node_sig][i_node_sig_2][0] = updated_i_node
 
     combined_heuristic = (c_val, g_val + h_val, -g_val)
     tie_break = 0
@@ -278,22 +280,23 @@ def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):
 
     closed_list = []
     count = 0
-    while len(open_list) > 0:
+    while len(key_heap) > 0:
         currKey = heapq.heappop(key_heap)
+        #print(key_heap)
         if currKey not in open_list:
             continue
         count+=1
         curr = open_list[currKey]
         #count += 1
         if curr['is_goal']:
-            print(count)
+            #print(count)
             return get_path(curr)
 
         if curr['loc'] == goal_loc and curr['interval'][0] >= lower_bound_timestep:
             c_future = get_c_future(curr['loc'], soft_obstacle, curr['interval'][0])
             
             if c_future == 0:
-                print(count)
+                #print(count)
                 return get_path(curr)
 
             updated_node = curr.copy()
@@ -321,7 +324,7 @@ def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):
         
 
     # If there is no solution, return None to track of agents who does not have solutions when finding initial paths
-    print("none")
+    #print("none")
     return None
 
 #SIPPS needs to compare based on f(n), and take the solution with lowest c_val?
