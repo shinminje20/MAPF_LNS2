@@ -15,18 +15,18 @@ def selectNeighbour(paths, neighbourhood_method, numNeighbourhood, width, height
     method = 0
     if neighbourhood_method == 0:
         # collision
-        #print("collisionNeighbourhood")
+        print("collisionNeighbourhood")
         method = 0
         neighbourhood = collisionNeighbourhood(
             paths, numNeighbourhood, width, height, instanceMap)
     elif neighbourhood_method == 1:
         # failure
-        #print("failureNeighbourhood")
+        print("failureNeighbourhood")
         method = 1
         neighbourhood = failureNeighbourhood(paths, numNeighbourhood)
     else:
         # random
-        #print("randomNeighbourhood")
+        print("randomNeighbourhood")
         method = 2
         neighbourhood = randomNeighbourhood(paths, numNeighbourhood)
 
@@ -48,6 +48,9 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
     newPaths = prioritized_planning(
         paths, neighbourhood, instanceMap, instanceStarts, instanceGoals)
 
+    #print(neighbourhood)
+    #print(newPaths)
+
     newPathsSolution = copy.copy(paths)
 
     for i in range(len(neighbourhood)):
@@ -56,6 +59,8 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
 
     # sum of collision pair of all agents
     numCp_newPathsSolution = sum(deg(newPathsSolution))
+
+    print(degID(newPathsSolution))
 
     ALNS_weight = updateWeight(ALNS_weight, ALNS_r, prevCP, numCp_newPathsSolution, method)
 
@@ -69,15 +74,15 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
 
 
 def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
-    newPath = prioritized_planning([], list(
-        range(0, len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
+    newPath = prioritized_planning([], list(range(len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
 
     pathCosts = 0
-    for path in newPath:
-        print(path)
-        pathCosts += len(path)
+    for i in range(len(newPath)):
+        print("agent", i, newPath[i])
+        pathCosts += len(newPath[i])
 
     print(pathCosts)
+    print(degID(newPath))
 
     numCp = 0
     numCp = sum(deg(newPath))
