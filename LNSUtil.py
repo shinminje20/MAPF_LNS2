@@ -16,14 +16,32 @@ def deg(path):
     degList = []
     deg = 0
     for firstPath in range(0, len(path), 1):
-        for secondPath in range(0, len(path), 1):
+        for secondPath in range(firstPath + 1, len(path), 1):
+            if(path[firstPath] == path[secondPath]):
+                continue
+            length = len(path[secondPath]) if len(path[firstPath]) > len(path[secondPath]) else len(path[firstPath])
+            for timestep in range(0, length, 1):
+                if compare(path[firstPath][timestep], path[secondPath][timestep])\
+                    or (timestep > 0 and compare(path[firstPath][timestep-1], path[secondPath][timestep]) and compare(path[firstPath][timestep], path[secondPath][timestep-1])):
+                    deg += 1
+                    break
+        degList.append(deg)
+        deg = 0
+    return degList
+
+
+def degID(path):
+    degList = []
+    for firstPath in range(0, len(path), 1):
+        for secondPath in range(firstPath + 1, len(path), 1):
             if(path[firstPath] == path[secondPath]):
                 continue
             length = len(path[secondPath]) if len(path[firstPath]) > len(path[secondPath]) else len(path[firstPath])
             for timestep in range(0, length, 1):
                 if compare(path[firstPath][timestep], path[secondPath][timestep]):
-                    deg += 1
+                    degList.append((firstPath, secondPath, timestep))
                     break
-        degList.append(deg)
-        deg = 0
+                elif timestep > 0 and compare(path[firstPath][timestep-1], path[secondPath][timestep]) and compare(path[firstPath][timestep], path[secondPath][timestep-1]):
+                    degList.append((firstPath, secondPath, timestep-1, timestep))
+                    break
     return degList

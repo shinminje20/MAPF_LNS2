@@ -7,22 +7,20 @@ from LNSUtil import *
 def randomNeighbourhood(paths, N):
     pathCopy = paths
     degList = deg(pathCopy)
-    print("degList" + str(degList))
+    #print("degList" + str(degList))
 
     probList = []
     for i in range(0, len(degList), 1):
-        for j in range(0, degList[i], 1):
-            probList.append(i)
-    print(probList)
+        probList.append(degList[i] + 1)
+    #print(probList)
 
-    neighbour = []
-    i = 0
-    while i < N:
-        randomIndex = probList[random.randint(0, len(probList)-1)]
-        if (randomIndex in neighbour):
-            continue
-        neighbour.append(randomIndex)
-        i += 1
+    agentNumbersList = list(range(len(paths)))
+    neighbourhood = set()
 
-    return neighbour
+    while len(neighbourhood) < N:
+        #print("debug")
+        randomIndex = random.choices(agentNumbersList, weights = probList, k = 1)
+        neighbourhood.add(randomIndex[0])
+
+    return list(neighbourhood)
     # neighbour: list of agent number (not sorted)

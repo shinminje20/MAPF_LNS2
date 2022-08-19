@@ -73,8 +73,8 @@ def failureNeighbourhood(paths, n):
     for i in range(len(paths_sets)):
         if paths[i][-1] in paths_sets[a1Id]:
             Ag.append(i)
-    print("Ag")
-    print(Ag)
+    #print("Ag")
+    #print(Ag)
 
     union = set(As).union(set(Ag))
 

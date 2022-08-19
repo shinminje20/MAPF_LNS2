@@ -1,6 +1,9 @@
 from random import randrange
+import time
+import heapq
 
 def collisionNeighbourhood(paths, N, width, height, instanceMap):
+	#print("colneigh")
 	#organize paths into lookup dictionary
 	timepos = {} # {y, x, t}: [agents...]
 	numAgents = len(paths)
@@ -39,18 +42,45 @@ def collisionNeighbourhood(paths, N, width, height, instanceMap):
 	adjlistKeys = list(adjlist.keys())
 	connectedComp = [ adjlistKeys[randrange(0, len(adjlistKeys))] ]
 	index = 0
-	visited = {}
-	visited[connectedComp[0]] = 1
+	visited = set()
+	visited.add(connectedComp[0])
 	while index < len(connectedComp):
 		for nextVertex in adjlist[connectedComp[index]]:
 			if nextVertex not in visited:
 				connectedComp.append(nextVertex)
-				visited[nextVertex] = 1
+				visited.add(nextVertex)
 		index += 1
 	
 	neighbourhood = []
 
 	if len(connectedComp) < N:
+		#distance based non-random fill with other agents
+		#get random member and pos/time
+		#calculate manhattan distance to other agents
+		#pick closest not-yet-visited
+		#repeat until filled
+		neighbourhood.extend(list(visited))
+		while len(neighbourhood) < N:
+			# select random member of connectedComp
+			startMember = neighbourhood[randrange(len(neighbourhood))]
+
+			# choose random time,pos in member's path
+			startTime = randrange(len(paths[startMember]))
+			startPos = paths[startMember][startTime]
+
+			#calculate manhattan distance to non-visited agents
+			distanceToAgents = []
+			for i in range(len(paths)):
+				if i not in visited:
+					agentPos = paths[i][startTime] if startTime < len(paths[i]) else paths[i][-1]
+					distance = abs(agentPos[0]-startPos[0]) + abs(agentPos[1]-startPos[1])
+					heapq.heappush(distanceToAgents, (distance, i))
+
+			#pick from heap to fill N without restarting
+			while len(neighbourhood) < N:
+				nextAgent = heapq.heappop(distanceToAgents)
+				neighbourhood.append(nextAgent[1])
+		'''
 		print("random walk fill")
 		#random walk to find collisions to fill size N neighbourhood
 			#use timepos dictionary to check collisions
@@ -67,19 +97,23 @@ def collisionNeighbourhood(paths, N, width, height, instanceMap):
 			moves = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 			currPos = startPos
 			nextCollidableAgentFound = False
+			startTime = time.clock_gettime_ns(time.CLOCK_REALTIME)
 			while nextCollidableAgentFound == False:
 				# select random eligible move
 				nextPos = randomValidMove(currPos, instanceMap, width, height)
 				# perform move if eligible
 				if nextPos == None:
 					#None move was found, end loop and restart or do nothing?
-					#nextCollidableAgentFound = True
-					continue
+					print("debug1")
+					nextCollidableAgentFound = True
+					break
 				else:
+					searchTime = time.clock_gettime_ns(time.CLOCK_REALTIME)
+					if searchTime - startTime > 5000000000:
+						break
+					print(nextPos, len(visited), len(neighbourhood))
 					currPos = nextPos
 					# check for other agents at this time step
-					deltaTime = 0
-					nextCollidableAgentFound = False
 					state = (currPos[0], currPos[1], startTime)
 					if (currPos[0], currPos[1], startTime) in timepos:
 						for agent in timepos[state]:
@@ -88,8 +122,9 @@ def collisionNeighbourhood(paths, N, width, height, instanceMap):
 								visited[agent] = 1
 								nextCollidableAgentFound = True
 								break
+		'''
 	elif len(connectedComp) >= N:
-		print("connectedComp subset")
+		#print("connectedComp subset")
 		revisited = {}
 		revisited[connectedComp[0]] = 1
 		neighbourhood.append(connectedComp[0])
@@ -111,11 +146,11 @@ def randomValidMove(currPos, instanceMap, width, height):
 	validMoves = []
 	for move in moves:
 		nextPos = [currPos[0] + move[0], currPos[1] + move[1]]
-		if (instanceMap[nextPos[0]][nextPos[1]] == '.' 
-			and nextPos[0] >= 0 
+		if (nextPos[0] >= 0 
 			and nextPos[0] < height 
 			and nextPos[1] >= 0 
-			and nextPos[1] < width):
+			and nextPos[1] < width 
+			and instanceMap[nextPos[0]][nextPos[1]] == True):
 			validMoves.append(nextPos)
 	if len(validMoves) > 0:
 		return validMoves[randrange(0, len(validMoves))]

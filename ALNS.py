@@ -14,9 +14,9 @@ def ALNS(weight):
     return random.choices(population, weights=weight, k=1)[0]
 
 
-def updateWeight(weight, r, cp1, cp2):
+def updateWeight(weight, r, cp1, cp2, method):
     cp = cp1-cp2
-    weight = r * max(0, cp) + (1-r)
+    weight[method] = r * max(0, cp) + (1-r)
     return weight
 
 
