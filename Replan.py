@@ -15,18 +15,18 @@ def selectNeighbour(paths, neighbourhood_method, numNeighbourhood, width, height
     method = 0
     if neighbourhood_method == 0:
         # collision
-        print("collisionNeighbourhood")
+        print("\ncollisionNeighbourhood")
         method = 0
         neighbourhood = collisionNeighbourhood(
             paths, numNeighbourhood, width, height, instanceMap)
     elif neighbourhood_method == 1:
         # failure
-        print("failureNeighbourhood")
+        print("\nfailureNeighbourhood")
         method = 1
         neighbourhood = failureNeighbourhood(paths, numNeighbourhood)
     else:
         # random
-        print("randomNeighbourhood")
+        print("\nrandomNeighbourhood")
         method = 2
         neighbourhood = randomNeighbourhood(paths, numNeighbourhood)
 

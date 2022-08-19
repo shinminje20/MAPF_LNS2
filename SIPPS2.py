@@ -1,14 +1,35 @@
 import heapq
-from Utils import *
+from Utils2 import *
 # from LNS import *
 
 
 
-# def is_valid_move(next_loc):
-    
-#     if next_loc[0] < 0 or  next_loc[1] < 0 or  next_loc[0] > len(my_map) - 1 or  next_loc[1] > len(my_map[0]) - 1:
-#         return False
-#     return True
+
+'''
+structure interval table with seperate empty/soft intervals and refactor codebase
+
+- moving from curr_loc to next_loc within time window of max(lows) min(highs)
+- determine if dominant empty or early soft + later empty
+- insert nodes (1 or 2 split)
+    - between low of current node and low of next node, count soft obstacle collisions
+        - dominant empty: +0 collisions
+        - early soft: +1 collisions
+        - later empty: count collisions in interval table
+        also, count soft-edge collisions
+
+
+
+
+
+
+'''
+
+
+
+
+
+
+
 
 def get_valid_nodes(my_map, curr_loc, low, high, safe_interval_table):
     
@@ -18,29 +39,28 @@ def get_valid_nodes(my_map, curr_loc, low, high, safe_interval_table):
     
     for next_loc in neighbor_locations:
         #print(next_loc, my_map[next_loc[1]][next_loc[0]])
-        for interval_id, interval in enumerate(safe_interval_table[next_loc]):  
+        for i in range(len(safe_interval_table[next_loc])):
+            interval = safe_interval_table[next_loc][i]
+        #for interval_id, interval in enumerate(safe_interval_table[next_loc]):  
             #find safe intervals that overlap with current node's interval
             #can reduce conditions: if low+1 in interval or high in interval
             if interval[0] <= high and interval[0] >= low + 1 \
                 or interval[1] <= high + 1 and interval[1] > low + 1 \
                 or low + 1 >= interval[0] and low + 1 < interval[1] \
                 or high >= interval[0] and high < interval[1]:
-                valid_neighbors.append((next_loc, interval_id))
+                valid_neighbors.append((next_loc, i))
     
     return valid_neighbors
 
 def insert_node(node, open_list, key_heap, visited_list, h_values, soft_obstacle, count_tie_break):
-    g_val = node['parent']['g_val'] + 1
+    g_val = node['parent']['g_val'] + (node['interval'][0] - node['parent']['interval'][0])
+    node['g_val'] = g_val
     h_val = h_values[node['loc']]
     f_val = g_val + h_val
-    c_val = get_c_val(node, soft_obstacle)
+    c_val = node['c_val']
     
     n_low = node['interval'][0]
     n_high = node['interval'][1]
-
-    node['g_val'] = g_val
-    node['h_val'] = h_val
-    node['c_val'] = c_val
 
     node_sig = (node['loc'], node['id'], node['is_goal'])
     node_sig_2 = (c_val, n_low, n_high)
@@ -99,11 +119,11 @@ def pop_node(open_list):
     _, curr = heapq.heappop(open_list)
     return curr
 
-def get_earliest_arrival_time(curr_loc, edge, low, high, hard_obstacle, soft_obstacle):
+def get_earliest_arrival_time(curr_loc, edge, low, high_limit, hard_obstacle, soft_obstacle):
 
     hard_edge_times = set()
     soft_vertex_times = set()
-    soft_edge_times = set()    
+    soft_edge_times = set()
 
     if hard_obstacle != None and edge in hard_obstacle:
         hard_edge_times = hard_obstacle[edge]
@@ -115,8 +135,21 @@ def get_earliest_arrival_time(curr_loc, edge, low, high, hard_obstacle, soft_obs
             soft_edge_times = soft_obstacle[edge]
 
     new_low = low
-    while new_low < high:
+    while new_low < high_limit:
         if new_low in hard_edge_times or new_low in soft_vertex_times or new_low in soft_edge_times:
+            new_low += 1
+        else:
+            return new_low
+    return new_low
+
+def hard_edge_check(edge, low, high_limit, hard_obstacle):
+    hard_edge_times = set()
+    if hard_obstacle != None and edge in hard_obstacle:
+        hard_edge_times = hard_obstacle[edge]
+
+    new_low = low
+    while new_low < high_limit:
+        if new_low in hard_edge_times:
             new_low += 1
         else:
             return new_low
@@ -129,28 +162,41 @@ def expand_node(my_map, curr_node, open_list, key_heap, visited_list, safe_inter
     node_high = curr_node['interval'][1]
     
     valid_neighbors = get_valid_nodes(my_map, curr_loc, node_low, node_high, safe_interval_table)
-    #print(valid_neighbors)
+    print("valid_neighbors", valid_neighbors)
     # Algorithm 2 line 2-3
     for (next_loc, interval_id) in valid_neighbors:
         low = safe_interval_table[next_loc][interval_id][0]
         high = safe_interval_table[next_loc][interval_id][1]
 
-        earliest_low = get_earliest_arrival_time(curr_loc, (curr_loc, next_loc), low, high, hard_obstacle, soft_obstacle) # uncolide with hard, soft obstacle
+        high_limit = min(node_high, high)
+        low_limit = max(node_low+1, low)
 
-        if earliest_low is not None and earliest_low > low:
-            
-            n1 = {'c_val': 0, 'loc': next_loc, 'g_val': 0, 
-                'h_val': h_values[next_loc], 'interval': (low, earliest_low), 
+        earliest_low = get_earliest_arrival_time(curr_loc, (curr_loc, next_loc), low_limit, high_limit, hard_obstacle, soft_obstacle) # uncolide with hard, soft obstacle
+
+        if earliest_low > low_limit and earliest_low < high_limit is not None and earliest_low > low:
+            #print("neighbour", next_loc, interval_id, "intervals", low, earliest_low, high)
+
+            n1 = {'c_val': curr_node['c_val'] + 1, 'loc': next_loc, 'g_val': 0, 
+                'h_val': h_values[next_loc], 'interval': (low_limit, earliest_low), 
                 'id': interval_id, 'is_goal': False, 'parent': curr_node}
             insert_node(n1, open_list, key_heap, visited_list, h_values, soft_obstacle, count_tie_break)
 
-            n2 = {'c_val': 0, 'loc': next_loc, 'g_val': 0, 
+            n2 = {'c_val': curr_node['c_val'], 'loc': next_loc, 'g_val': 0, 
                 'h_val': h_values[next_loc], 'interval': (earliest_low, high), 
                 'id': interval_id, 'is_goal': False, 'parent': curr_node}
             insert_node(n2, open_list, key_heap, visited_list, h_values, soft_obstacle, count_tie_break)
         else:
-            n1 = {'c_val': 0, 'loc': next_loc, 'g_val': 0, 
-                'h_val': h_values[next_loc], 'interval': (low, high), 
+            #print("neighbour", next_loc, interval_id, "interval", low, high)
+
+            c_val = curr_node['c_val']
+            earliest_soft_low = low_limit
+            if earliest_low == high_limit: #interval is all soft
+                earliest_soft_low = hard_edge_check((curr_loc, next_loc), low_limit, high_limit, hard_obstacle)
+                if earliest_soft_low == None:
+                    continue
+                c_val += 1
+            n1 = {'c_val': c_val, 'loc': next_loc, 'g_val': 0, 
+                'h_val': h_values[next_loc], 'interval': (earliest_soft_low, high), 
                 'id': interval_id, 'is_goal': False, 'parent': curr_node}
             insert_node(n1, open_list, key_heap, visited_list, h_values, soft_obstacle, count_tie_break)
 
@@ -179,16 +225,21 @@ def is_contain_edge(parent_loc, node_loc, n_low, soft_obstacle):
     
     return False
 
-def get_c_val(node, soft_obstacle):
+def get_c_val(node, soft_obstacle, hard_obstacle):
     parent_node = node['parent']
-    parent_c_val = parent_node['c_val']
+    parent_c_val = 0
+    if parent_node != None:
+        parent_c_val = parent_node['c_val']
+
     node_interval = node['interval']
     node_loc = node['loc']
     cv = 1 if is_contain_obstacle(node_loc, node_interval, soft_obstacle) else 0
 
-    n_low = node['interval'][0]
-    n_edge = (parent_node['loc'], node['loc'])
-    ce = 1 if is_contain_edge(parent_node['loc'], node_loc, node_interval[0], soft_obstacle) else 0
+    ce = 0
+    if parent_node != None:
+        n_low = node['interval'][0]
+        n_edge = (parent_node['loc'], node['loc'])
+        ce = 1 if is_contain_edge(parent_node['loc'], node_loc, node_interval[0], soft_obstacle) else 0
 
     return parent_c_val + cv + ce
 
@@ -209,6 +260,8 @@ def get_c_future(curr_loc, soft_obstacle, n_low):
 def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):    
 
     safe_interval_table = build_safe_interval_table(my_map, hard_obstacle)  #my_map is avaialble paths excluding walls
+    print("hard_obstacle", hard_obstacle)
+    print("soft_obstacle", soft_obstacle)
     print("safe_interval_table", safe_interval_table)
 
     temp1 = h_values[start_loc]
@@ -237,18 +290,20 @@ def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):
         #print(key_heap)
         if currKey not in open_list:
             continue
-        count+=1
+
         curr = open_list[currKey]
-        #count += 1
+        count += 1
+        print(curr['c_val'], curr['loc'], curr['interval'][0])
+
         if curr['is_goal']:
-            #print(count)
+            print("count", count)
             return get_path(curr)
 
         if curr['loc'] == goal_loc and curr['interval'][0] >= lower_bound_timestep:
             c_future = get_c_future(curr['loc'], soft_obstacle, curr['interval'][0])
             
             if c_future == 0:
-                #print(count)
+                print("count", count)
                 return get_path(curr)
 
             updated_node = curr.copy()
@@ -260,7 +315,7 @@ def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):
         
 
     # If there is no solution, return None to track of agents who does not have solutions when finding initial paths
-    #print("none")
+    print("none", count)
     return None
 
 #SIPPS needs to compare based on f(n), and take the solution with lowest c_val?
