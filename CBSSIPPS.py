@@ -199,7 +199,6 @@ class CBSSolver(object):
                                 'collisions': detect_collisions(childPaths)}
                     self.push_node(childNode)
 
-        raise BaseException('No solutions')
         return None
 
 
