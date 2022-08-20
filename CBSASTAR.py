@@ -1,6 +1,3 @@
-from operator import ne
-from tkinter import N
-from turtle import width
 from loadscen import *
 from cbs import *
 from ALNS import *

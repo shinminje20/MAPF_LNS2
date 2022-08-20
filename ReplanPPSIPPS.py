@@ -1,5 +1,3 @@
-from operator import ne
-from tkinter import N
 from loadscen import *
 from ALNS import *
 from collisionneighbourhood import *
