@@ -40,36 +40,41 @@ if __name__ == '__main__':
     
     for file in sorted(glob.glob(args.instance)):
         
+        paths = None
+        unsolved_count = 0
+            while paths == None:
+            print("***Import an instance***")
 
-        print("***Import an instance***")
+            instanceMap, instanceStarts, instanceGoals = loadScen(file, args.num_agents)
+            print(file)
+            print(instanceMap, instanceStarts, instanceGoals)
+            map_width = len(instanceMap[0])
+            map_height = len(instanceMap)
+            timeLimit = args.time_limit #seconds
+            numNeighbour = args.num_neighbour
 
-        instanceMap, instanceStarts, instanceGoals = loadScen(file, args.num_agents)
-        print(file)
-        print(instanceMap, instanceStarts, instanceGoals)
-        map_width = len(instanceMap[0])
-        map_height = len(instanceMap)
-        timeLimit = args.time_limit #seconds
-        numNeighbour = args.num_neighbour
+            startTime = timer.time_ns()
+            if args.solver == "PPSIPPS":
+                print("***Run LNS2 PP with SIPPS***")
+                print("running file: ", file)
+                paths = LNS2PP(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
 
-        startTime = timer.time_ns()
-        if args.solver == "PPSIPPS":
-            print("***Run LNS2 PP with SIPPS***")
-            print("running file: ", file)
-            paths = LNS2PP(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
-
-        elif args.solver == "CBSSIPPS":
-            print("***Run LNS2 CBS with SIPPS***")
-            print("running file: ", file)
-            paths = LNS2CBS(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
+            elif args.solver == "CBSSIPPS":
+                print("***Run LNS2 CBS with SIPPS***")
+                print("running file: ", file)
+                paths = LNS2CBS(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
         
-        else:
-            raise RuntimeError("Unknown solver!")
-        endTime = timer.time_ns()
-        duration = endTime - startTime
+            else:
+                raise RuntimeError("Unknown solver!")
+            endTime = timer.time_ns()
+            duration = endTime - startTime
 
-        #print(paths)
+            if paths = None:
+                unsolved_count += 1
+
+
         cost = get_sum_of_cost(paths)
-        result_file.write("{},{},{}\n".format(file, cost, duration))
+        result_file.write("{},{},{}\n".format(file, cost, duration, unsolved_count))
 
 
     result_file.close()
