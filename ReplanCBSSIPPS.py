@@ -46,7 +46,7 @@ def import_mapf_instance(filename):
 
 
 # replan untill collision free
-def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP, timeLimit, start)
+def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP, timeLimit, start):
     # select a neighbourhood construction method
     currTime = timer.time()
     if currTime - start >= timeLimit:
