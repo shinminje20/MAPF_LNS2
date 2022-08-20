@@ -54,28 +54,27 @@ if __name__ == '__main__':
 
                 instanceMap, instanceStarts, instanceGoals = loadScen(file, args.num_agents)
                 print(file)
-                print(instanceMap, instanceStarts, instanceGoals)
+                #print(instanceMap, instanceStarts, instanceGoals)
                 map_width = len(instanceMap[0])
                 map_height = len(instanceMap)
 
-
-                startTime = timer.time_ns()
                 if args.solver == "PPSIPPS":
                     print("***Run LNS2 PP with SIPPS***")
                     print("running file: ", file)
-                    paths = LNS2PP(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
+                    paths, startTime = LNS2PP(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
 
                 elif args.solver == "CBSSIPPS":
                     print("***Run LNS2 CBS with SIPPS***")
                     print("running file: ", file)
-                    paths = LNS2CBS(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
+                    paths, startTime = LNS2CBS(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
         
                 else:
                     raise RuntimeError("Unknown solver!")
-                endTime = timer.time_ns()
+                endTime = timer.time()
                 duration = endTime - startTime
 
                 if paths == None:
+                    print("restarting")
                     unsolved_count += 1
 
 

@@ -51,19 +51,20 @@ def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanc
 
     numCp = 0
     numCp = sum(deg(paths))
+    start = timer.time()    
     if (numCp == 0):
-        return paths
+        return paths, start
 
     ALNS_weight = [1, 1, 1]
     ALNS_r = 0.1
 
-    start = timer.time()
+
     while numCp != 0:
         paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp, timeLimit, start)
         if paths == None:
-            return None
+            return None, None
             
-    return paths
+    return paths, start
 
 # if __name__ == "__main__":
 #     numNeighbourhood = 5
