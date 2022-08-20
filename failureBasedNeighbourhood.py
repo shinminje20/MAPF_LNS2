@@ -1,4 +1,3 @@
-from operator import ne
 import random
 from time import time
 from LNSUtil import *
