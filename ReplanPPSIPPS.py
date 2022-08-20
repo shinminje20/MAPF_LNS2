@@ -10,9 +10,6 @@ import time as timer
 # replan untill collision free
 def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP, timeLimit, start):
     # select a neighbourhood construction method
-    currTime = timer.time()
-    if currTime - start >= timeLimit:
-        return None, None
 
     # 0: collision, 1: failure, 2: random
     neighbourhood_kind = ALNS(ALNS_weight)
@@ -51,7 +48,7 @@ def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanc
 
     numCp = 0
     numCp = sum(deg(paths))
-    start = timer.time()
+    start = timer.time_ns()
     if (numCp == 0):
         return paths, start, 0
 
@@ -61,6 +58,7 @@ def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanc
     replan_counter = 0
     while numCp != 0:
         paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp, timeLimit, start)
+        replan_counter += 1
         if paths == None:
             return None, None, None
             

@@ -147,8 +147,8 @@ class CBSSolver(object):
         self.num_of_expanded += 1
         return node
 
-    def find_solution(self, disjoint=False):
-        self.start_time = timer.time()
+    def find_solution(self, timeLimit, startTime):
+        #self.start_time = timer.time()
 
         neighbourhood_set = set(self.neighbourhood)
         init_constraints = {} 
@@ -168,6 +168,9 @@ class CBSSolver(object):
         self.push_node(root)
 
         while len(self.open_list) > 0:
+            currTime = timer.time_ns()
+            if currTime - startTime >= timeLimit:
+                return None
             currNode = self.pop_node()
             if len(currNode['collisions']) == 0:
                 #self.print_results(currNode)

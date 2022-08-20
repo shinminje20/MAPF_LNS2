@@ -37,10 +37,10 @@ if __name__ == '__main__':
     filename = args.instance
     filename = filename.replace("/", "_").replace("-", "_").replace(".scen", "").replace("*", "")
     # filename = filename.replace(".scen", '').replace("*")
-    result_file_name = "results/results_" + filename + "_" + args.solver + ".csv"
+    result_file_name = "statsResults/results_" + filename + "_" + args.solver + "_" + str(args.num_agents) + "_" + str(args.num_neighbour) + ".csv"
     # raise 'asdf'
     result_file = open(result_file_name, "w", buffering=1)
-    timeLimit = args.time_limit #seconds
+    timeLimit = args.time_limit * 1000000000 #nanoseconds
     numNeighbour = args.num_neighbour    
     sample_size = args.sample_size
 
@@ -70,8 +70,9 @@ if __name__ == '__main__':
         
                 else:
                     raise RuntimeError("Unknown solver!")
-                endTime = timer.time()
-                duration = endTime - startTime
+                endTime = timer.time_ns()
+                if startTime != None:
+                    duration = endTime - startTime
 
                 if paths == None:
                     print("restarting")
@@ -79,7 +80,7 @@ if __name__ == '__main__':
 
 
             cost = get_sum_of_cost(paths)
-            result_file.write("{},{},{}\n".format(file, cost, duration, replan_count, unsolved_count))
+            result_file.write("{},{},{},{}\n".format(cost, duration, replan_count, unsolved_count))
 
 
     result_file.close()

@@ -48,9 +48,6 @@ def import_mapf_instance(filename):
 # replan untill collision free
 def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP, timeLimit, start):
     # select a neighbourhood construction method
-    currTime = timer.time()
-    if currTime - start >= timeLimit:
-        return None, None
         
     # 0: collision, 1: failure, 2: random
     neighbourhood_kind = ALNS(ALNS_weight)
@@ -76,7 +73,10 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
         neighbourhoodGoals.append(instanceGoals[neighbourhood[i]])
 
     cbs = CBSSolver(instanceMap, neighbourhoodStarts, neighbourhoodGoals, paths, neighbourhood)
-    newPaths = cbs.find_solution(False)
+    newPaths = cbs.find_solution(timeLimit, start)
+
+    if newPaths == None:
+        return None, None
 
     #construct new paths solution and update variables
     newPathsSolution = copy.copy(paths)
@@ -102,7 +102,7 @@ def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instan
 
     numCp = 0
     numCp = sum(deg(paths))
-    start = timer.time()    
+    start = timer.time_ns()
     if (numCp == 0):
         return paths, start, 0
 
