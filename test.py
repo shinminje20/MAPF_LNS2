@@ -1,7 +1,7 @@
 from collisionneighbourhood import *
 from prioritizedPlanning import *
 from Replan import *
-from Utils import *
+from Utils2 import *
 from LNSUtil import *
 import heapq
 

@@ -1,55 +1,5 @@
 import heapq
 from Utils2 import *
-# from LNS import *
-
-
-
-
-'''
-structure interval table with seperate empty/soft intervals and refactor codebase
-
-- moving from curr_loc to next_loc within time window of max(lows) min(highs)
-- determine if dominant empty or early soft + later empty
-- insert nodes (1 or 2 split)
-    - between low of current node and low of next node, count soft obstacle collisions
-        - dominant empty: +0 collisions
-        - early soft: +1 collisions
-        - later empty: count collisions in interval table
-        also, count soft-edge collisions
-
-
-
-
-
-
-'''
-
-
-
-
-
-
-
-
-def get_valid_nodes(my_map, curr_loc, low, high, safe_interval_table):
-    
-    valid_neighbors = []
-
-    neighbor_locations = get_neighbors(curr_loc, my_map)
-    
-    for next_loc in neighbor_locations:
-        #print(next_loc, my_map[next_loc[1]][next_loc[0]])
-        for i in range(len(safe_interval_table[next_loc])):
-            interval = safe_interval_table[next_loc][i]
-        #for interval_id, interval in enumerate(safe_interval_table[next_loc]):  
-            #find safe intervals that overlap with current node's interval
-            if interval[0] <= high and interval[0] >= low + 1 \
-                or interval[1] <= high + 1 and interval[1] > low + 1 \
-                or low + 1 >= interval[0] and low + 1 < interval[1] \
-                or high >= interval[0] and high < interval[1]:
-                valid_neighbors.append((next_loc, i))
-    
-    return valid_neighbors
 
 def insert_node(node, open_list, key_heap, visited_list, h_values, soft_obstacle, count_tie_break):
     g_val = node['g_val']
@@ -107,14 +57,25 @@ def insert_node(node, open_list, key_heap, visited_list, h_values, soft_obstacle
         visited_list[node_sig][node_sig_2] = {}
     visited_list[node_sig][node_sig_2] = (node, key)
 
+def get_valid_nodes(my_map, curr_loc, low, high, safe_interval_table):
+    
+    valid_neighbors = []
 
-    #heapq.heappush(open_list, ((combined_heuristic[0], combined_heuristic[1], combined_heuristic[2], tie_break), node))
-
-    #put in visited list too
-
-def pop_node(open_list):
-    _, curr = heapq.heappop(open_list)
-    return curr
+    neighbor_locations = get_neighbors(curr_loc, my_map)
+    
+    for next_loc in neighbor_locations:
+        #print(next_loc, my_map[next_loc[1]][next_loc[0]])
+        for i in range(len(safe_interval_table[next_loc])):
+            interval = safe_interval_table[next_loc][i]
+        #for interval_id, interval in enumerate(safe_interval_table[next_loc]):  
+            #find safe intervals that overlap with current node's interval
+            if interval[0] <= high and interval[0] >= low + 1 \
+                or interval[1] <= high + 1 and interval[1] > low + 1 \
+                or low + 1 >= interval[0] and low + 1 < interval[1] \
+                or high >= interval[0] and high < interval[1]:
+                valid_neighbors.append((next_loc, i))
+    
+    return valid_neighbors
 
 def get_earliest_arrival_time(curr_loc, edge, low, high_limit, hard_obstacle, soft_obstacle):
     hard_edge_times = set()
@@ -166,49 +127,6 @@ def expand_node(my_map, curr_node, open_list, key_heap, visited_list, safe_inter
                         'is_goal': False, 'parent': curr_node}
             insert_node(next_node, open_list, key_heap, visited_list, h_values, soft_obstacle, count_tie_break)
 
-def is_contain_obstacle(node_loc, interval, soft_obstacle):
-    
-    if node_loc in soft_obstacle:
-        temp_times = copy.copy(soft_obstacle[node_loc])
-
-        while len(temp_times) > 0:
-            time = heapq.heappop(temp_times)
-            if interval[0] <= time and time < interval[1]:
-                return True
-    
-    return False
-
-def is_contain_edge(parent_loc, node_loc, n_low, soft_obstacle):
-
-    if (parent_loc, node_loc) in soft_obstacle:
-
-        temp_times = copy.copy(soft_obstacle[(parent_loc, node_loc)])
-
-        while len(temp_times) > 0:
-            time = heapq.heappop(temp_times)
-            if time == n_low:
-                return True
-    
-    return False
-
-def get_c_val(node, soft_obstacle, hard_obstacle):
-    parent_node = node['parent']
-    parent_c_val = 0
-    if parent_node != None:
-        parent_c_val = parent_node['c_val']
-
-    node_interval = node['interval']
-    node_loc = node['loc']
-    cv = 1 if is_contain_obstacle(node_loc, node_interval, soft_obstacle) else 0
-
-    ce = 0
-    if parent_node != None:
-        n_low = node['interval'][0]
-        n_edge = (parent_node['loc'], node['loc'])
-        ce = 1 if is_contain_edge(parent_node['loc'], node_loc, node_interval[0], soft_obstacle) else 0
-
-    return parent_c_val + cv + ce
-
 def get_c_future(curr_loc, soft_obstacle, n_low):
     c_future = 0
     
@@ -238,16 +156,9 @@ def get_path(goal_node):
     path.reverse()
     return path
 
-
 def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):    
 
     safe_interval_table = build_safe_interval_table(my_map, hard_obstacle, soft_obstacle)  #my_map is avaialble paths excluding walls
-    #print("hard_obstacle", hard_obstacle)
-    #print("soft_obstacle", soft_obstacle)
-    #print("safe_interval_table", safe_interval_table)
-
-    #temp1 = h_values[start_loc]
-    #temp2 = safe_interval_table[start_loc][0]
 
     root = {'c_val': 0, 'loc': start_loc, 'g_val': 0, 'h_val': h_values[start_loc], 'interval': safe_interval_table[start_loc][0], 'id': 0, 'is_goal': False, 'parent': None}
     lower_bound_timestep = 0
@@ -266,25 +177,19 @@ def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):
     visited_list[(root['loc'], root['id'], root['is_goal'])][(root['c_val'], root['interval'][0], root['interval'][1])] = (root, (0, 0, 0, 0))
 
     closed_list = []
-    #count = 0
     while len(key_heap) > 0:
         currKey = heapq.heappop(key_heap)
         if currKey not in open_list:
             continue
         curr = open_list[currKey]
 
-        #count += 1
-        #print(curr['c_val'], curr['loc'], curr['interval'][0])
-
         if curr['is_goal']:
-            #print("count", count)
             return get_path(curr)
 
         if curr['loc'] == goal_loc and curr['interval'][0] >= lower_bound_timestep:
             c_future = get_c_future(curr['loc'], soft_obstacle, curr['interval'][0])
             
             if c_future == 0:
-                #print("count", count)
                 return get_path(curr)
 
             updated_node = curr.copy()
@@ -294,10 +199,5 @@ def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):
 
         expand_node(my_map, curr, open_list, key_heap, visited_list, safe_interval_table, hard_obstacle, soft_obstacle, h_values, count_tie_break) 
         
-
     # If there is no solution, return None to track of agents who does not have solutions when finding initial paths
-    #print("none", count)
     return None
-
-#SIPPS needs to compare based on f(n), and take the solution with lowest c_val?
-#need new get path function to fill in wait times
