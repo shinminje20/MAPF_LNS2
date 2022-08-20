@@ -169,10 +169,6 @@ class CBSSolver(object):
 
         while len(self.open_list) > 0:
             currNode = self.pop_node()
-            #if len(currNode['collisions']) > 0:
-                #print("collisions", currNode['collisions'], self.neighbourhood[currNode['collisions'][0]['a1']], self.neighbourhood[currNode['collisions'][0]['a2']])
-            #print(currNode['constraints'])
-            #print(currNode, '\n')
             if len(currNode['collisions']) == 0:
                 self.print_results(currNode)
                 return currNode['paths']
@@ -195,13 +191,6 @@ class CBSSolver(object):
                         heapq.heappush(hard_constraints[con2['loc']], con2['timestep'])
 
                 newPath = sipps(self.my_map, self.starts[agent], self.goals[agent], self.heuristics[agent], hard_constraints, {})
-                print('\n')
-                print(currNode['collisions'])
-                #print(currNode['collisions'][0]['loc'])
-                #print(len(currNode['collisions'][0]['loc']))
-                #print(childCons)
-                #print(agent, newPath)
-                #print(hard_constraints)
                 if newPath != None:
                     childPaths[agent] = newPath
                     childNode = {'cost': get_sum_of_cost(childPaths),

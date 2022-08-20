@@ -116,7 +116,7 @@ def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceG
 if __name__ == "__main__":
     numNeighbourhood = 5
     numAgent = 10
-    instanceMap, instanceStarts, instanceGoals = loadScen('room-32-32-4-even-1.scen', numAgent)
+    instanceMap, instanceStarts, instanceGoals = loadScen('room-32-32-4-even-11.scen', numAgent)
     paths = LNS2(numNeighbourhood, len(instanceMap[0]), len(instanceMap), instanceMap,
                 instanceStarts, instanceGoals)
     print("solution")

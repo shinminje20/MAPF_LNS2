@@ -119,4 +119,5 @@ def failureNeighbourhood(paths, n):
                     for i in range(count):
                         neighbourhood.append(sortedDic[key][i])
 
+    print(neighbourhood)
     return list(set(neighbourhood))
