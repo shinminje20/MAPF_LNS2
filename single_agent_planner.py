@@ -1,243 +1,191 @@
-from sqlite3 import Timestamp
-import time as timer
 import heapq
-import random
-from tkinter.messagebox import NO
-from single_agent_planner import compute_heuristics, a_star, get_location, get_sum_of_cost
+
+def move(loc, dir):
+    #directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+    directions = [(0, -1), (1, 0), (0, 1), (-1, 0), (0, 0)]
+    return (loc[0] + directions[dir][0], loc[1] + directions[dir][1])
 
 
-def detect_collision(path1, path2):
-    ##############################
-    # Task 3.1: Return the first collision that occurs between two robot paths (or None if there is no collision)
-    #           There are two types of collisions: vertex collision and edge collision.
-    #           A vertex collision occurs if both robots occupy the same location at the same timestep
-    #           An edge collision occurs if the robots swap their location at the same timestep.
-    #           You should use "get_location(path, t)" to get the location of a robot at time t.
-    # longer path
-    maxLen = 0
-    if len(path1) > len(path2):
-        maxLen = len(path1)
-    else:
-        maxLen = len(path2)
-
-    # vertext collision
-    for timestep in range(maxLen):
-        if get_location(path1, timestep) == get_location(path2, timestep):
-            return get_location(path1, timestep), timestep
-
-    # edge collision
-    for timestep in range(maxLen):
-        if get_location(path1, timestep) == get_location(path2, timestep+1):
-            if get_location(path1, timestep+1) == get_location(path2, timestep):
-                return [get_location(path1, timestep), get_location(path1, timestep+1)], timestep+1
-
-    return (-1, -1), -1  # ex. loc = (1,1), timestep = 1
+def get_sum_of_cost(paths):
+    rst = 0
+    for path in paths:
+        rst += len(path) - 1
+    return rst
 
 
-def detect_collisions(paths):
-    ##############################
-    # Task 3.1: Return a list of first collisions between all robot pairs.
-    #           A collision can be represented as dictionary that contains the id of the two robots, the vertex or edge
-    #           causing the collision, and the timestep at which the collision occurred.
-    #           You should use your detect_collision function to find a collision between two robots.
-    collisions = []
-    numAgent = len(paths)
-    for i in range(numAgent):
-        for j in range(i+1, numAgent, 1):
-            loc, timestep = detect_collision(paths[i], paths[j])
-            if timestep == -1:
+def compute_heuristics(my_map, goal):
+    # Use Dijkstra to build a shortest-path tree rooted at the goal location
+    open_list = []
+    closed_list = dict()
+    root = {'loc': goal, 'cost': 0}
+    heapq.heappush(open_list, (root['cost'], goal, root))
+    closed_list[goal] = root
+    while len(open_list) > 0:
+        (cost, loc, curr) = heapq.heappop(open_list)
+        for dir in range(4):
+            child_loc = move(loc, dir)
+            child_cost = cost + 1
+            if child_loc[0] < 0 or child_loc[0] >= len(my_map) \
+               or child_loc[1] < 0 or child_loc[1] >= len(my_map[0]):
+               continue
+            if my_map[child_loc[0]][child_loc[1]]:
                 continue
-            if timestep != None:
-                if isinstance(loc, list) == False:  # vertex
-                    collision = {'a1': i, 'a2': j, 'loc': [
-                        loc], 'timestep': timestep}
-                    collisions.append(collision)
-                else:  # edge collision
-                    collision1 = {'a1': i, 'a2': j, 'loc': [
-                        loc[0], loc[1]], 'timestep': timestep}
-                    collisions.append(collision1)
+            child = {'loc': child_loc, 'cost': child_cost}
+            if child_loc in closed_list:
+                existing_node = closed_list[child_loc]
+                if existing_node['cost'] > child_cost:
+                    closed_list[child_loc] = child
+                    # open_list.delete((existing_node['cost'], existing_node['loc'], existing_node))
+                    heapq.heappush(open_list, (child_cost, child_loc, child))
+            else:
+                closed_list[child_loc] = child
+                heapq.heappush(open_list, (child_cost, child_loc, child))
 
-    return collisions
+    # build the heuristics table
+    h_values = dict()
+    for loc, node in closed_list.items():
+        h_values[loc] = node['cost']
+    return h_values
 
 
-def standard_splitting(collision):
+def build_constraint_table(constraints, agent):
     ##############################
-    # Task 3.2: Return a list of (two) constraints to resolve the given collision
-    #           Vertex collision: the first constraint prevents the first agent to be at the specified location at the
-    #                            specified timestep, and the second constraint prevents the second agent to be at the
-    #                            specified location at the specified timestep.
-    #           Edge collision: the first constraint prevents the first agent to traverse the specified edge at the
-    #                          specified timestep, and the second constraint prevents the second agent to traverse the
-    #                          specified edge at the specified timestep
-    constraints = []
-    # vertex
-    if (len(collision['loc']) == 1):
-        constraint1 = {
-            'agent': collision['a1'], 'loc': collision['loc'], 'timestep': collision['timestep']}
-        constraint2 = {
-            'agent': collision['a2'], 'loc': collision['loc'], 'timestep': collision['timestep']}
-        constraints.append(constraint1)
-        constraints.append(constraint2)
+    # Task 1.2/1.3: Return a table that contains the list of constraints of
+    #               the given agent for each time step. The table can be used
+    #               for a more efficient constraint violation check in the 
+    #               is_constrained function.
+    table = {}
+    table[-1] = {}
+    table[-2] = {}
+    for constraint in constraints:
+        #print('debug', constraint)
+        if constraint['agent'] == agent:
+            if type(constraint['timestep']) == type((1,1)): #indiefinite time constraint ie. goal nodes
+                table[-1][constraint['loc'][0]] = constraint['timestep'][1]
+            elif 'positive' in constraint: #positive constraints
+                table[-2][constraint['timestep']] = constraint['loc']
+            else:    #vertex/edge constraints
+                if constraint['timestep'] not in table:
+                    table[constraint['timestep']] = {}
+                if len(constraint['loc']) == 1:
+                    table[constraint['timestep']][constraint['loc'][0]] = 1
+                else:
+                    table[constraint['timestep']][(constraint['loc'][0], constraint['loc'][1])] = 1
+    return table
+    
 
-    # edge
-    if (len(collision['loc']) == 2):
-        constraint = {
-            'agent': collision['a1'], 'loc': collision['loc'], 'timestep': collision['timestep']}
-        constraint2 = {
-            'agent': collision['a2'], 'loc': [collision['loc'][1], collision['loc'][0]], 'timestep': collision['timestep']}
-        constraints.append(constraint)
-        constraints.append(constraint2)
-
-    return constraints
+def get_location(path, time):
+    if time < 0:
+        return path[0]
+    elif time < len(path):
+        return path[time]
+    else:
+        return path[-1]  # wait at the goal location
 
 
-def disjoint_splitting(collision):
+def get_path(goal_node):
+    path = []
+    curr = goal_node
+    while curr is not None:
+        path.append(curr['loc'])
+        curr = curr['parent']
+    path.reverse()
+    return path
+
+
+def is_constrained(curr_loc, next_loc, next_time, constraint_table):
     ##############################
-    # Task 4.1: Return a list of (two) constraints to resolve the given collision
-    #           Vertex collision: the first constraint enforces one agent to be at the specified location at the
-    #                            specified timestep, and the second constraint prevents the same agent to be at the
-    #                            same location at the timestep.
-    #           Edge collision: the first constraint enforces one agent to traverse the specified edge at the
-    #                          specified timestep, and the second constraint prevents the same agent to traverse the
-    #                          specified edge at the specified timestep
-    #           Choose the agent randomly
+    # Task 1.2/1.3: Check if a move from curr_loc to next_loc at time step next_time violates
+    #               any given constraint. For efficiency the constraints are indexed in a constraint_table
+    #               by time step, see build_constraint_table.
+    if next_loc in constraint_table[-1] and next_time >= constraint_table[-1][next_loc]:
+        return True
+    if next_time in constraint_table:
+        if (curr_loc, next_loc) in constraint_table[next_time]: #edge
+            return True
+        if next_loc in constraint_table[next_time]: #vertex
+            return True
+    if next_time in constraint_table[-2]: #positive constraint
+        if len(constraint_table[-2][next_time]) == 1 and [next_loc] != constraint_table[-2][next_time]:
+            return True
+        elif len(constraint_table[-2][next_time]) == 2 and [curr_loc, next_loc] != constraint_table[-2][next_time]:
+            return True
+    return False
 
-    pass
+def push_node(open_list, node):
+    heapq.heappush(open_list, (node['g_val'] + node['h_val'], node['h_val'], node['loc'], node))
 
 
-class CBSSolver(object):
-    """The high-level search of CBS."""
+def pop_node(open_list):
+    _, _, _, curr = heapq.heappop(open_list)
+    return curr
 
-    def __init__(self, my_map, starts, goals):
-        """my_map   - list of lists specifying obstacle positions
-        starts      - [(x1, y1), (x2, y2), ...] list of start locations
-        goals       - [(x1, y1), (x2, y2), ...] list of goal locations
-        """
 
-        self.my_map = my_map
-        self.starts = starts
-        self.goals = goals
-        self.num_of_agents = len(goals)
+def compare_nodes(n1, n2):
+    """Return true is n1 is better than n2."""
+    return n1['g_val'] + n1['h_val'] < n2['g_val'] + n2['h_val']
 
-        self.num_of_generated = 0
-        self.num_of_expanded = 0
-        self.CPU_time = 0
 
-        self.open_list = []
+def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints):
+    """ my_map      - binary obstacle map
+        start_loc   - start position
+        goal_loc    - goal position
+        agent       - the agent that is being re-planned
+        constraints - constraints defining where robot should or cannot go at each timestep
+    """
+    #print(my_map)
 
-        # compute heuristics for the low-level search
-        self.heuristics = []
-        for goal in self.goals:
-            self.heuristics.append(compute_heuristics(my_map, goal))
+    ##############################
+    # Task 1.1: Extend the A* search to search in the space-time domain
+    #           rather than space domain, only.
 
-    def push_node(self, node):
-        heapq.heappush(self.open_list, (node['cost'], len(
-            node['collisions']), self.num_of_generated, node))
-        print("Generate node {}".format(self.num_of_generated))
-        self.num_of_generated += 1
+    consTable = build_constraint_table(constraints, agent)
+    maxconstranttime = 0
+    if len(consTable[-1].items()) + len(consTable.items()) > 0:
+        max1 = 0
+        if len(consTable[-1].keys()) > 1:
+            max1 = max(list(consTable[-1].values()))
+        max2 = 0
+        if len(consTable.keys()) > 1:
+            max2 = max(list(consTable.keys()))
+        maxconstranttime = max(max1, max2)
 
-    def pop_node(self):
-        _, _, id, node = heapq.heappop(self.open_list)
-        print("Expand node {}".format(id))
-        self.num_of_expanded += 1
-        return node
+    #2.4
+    maxsearchtime = len(my_map) * len(my_map[0]) + abs(start_loc[0] - goal_loc[0]) + abs(start_loc[1] - goal_loc[1]) + maxconstranttime
 
-    def find_solution(self, disjoint=True):
-        """ Finds paths for all agents from their start locations to their goal locations
+    open_list = []
+    closed_list = dict()
+    earliest_goal_timestep = 0
+    h_value = h_values[start_loc]
+    root = {'loc': start_loc, 'time':0, 'g_val': 0, 'h_val': h_value, 'parent': None}
+    push_node(open_list, root)
+    #closed_list[(root['loc'])] = root
+    closed_list[(root['loc'], root['time'])] = root
+    while len(open_list) > 0:
+        curr = pop_node(open_list)
+        #2.4
+        if curr['time'] > maxsearchtime:
+            break
+        #############################
+        # Task 1.4: Adjust the goal test condition to handle goal constraints
+        if curr['loc'] == goal_loc and curr['time'] >= maxconstranttime:
+            return get_path(curr)
+        for dir in range(5):
+            child_loc = move(curr['loc'], dir)
+            if child_loc[0] < 0 or child_loc[1] < 0 or child_loc[0] >= len(my_map) or child_loc[1] >= len(my_map[child_loc[0]]) or my_map[child_loc[0]][child_loc[1]] or is_constrained(curr['loc'], child_loc, curr['time'] + 1, consTable):
+                continue
+            child = {'loc': child_loc,
+                    'time': curr['time'] + 1, #add
+                    'g_val': curr['g_val'] + 1,
+                    'h_val': h_values[child_loc],
+                    'parent': curr}
+            if (child['loc'], child['time']) in closed_list:
+                existing_node = closed_list[(child['loc'], child['time'])]
+                if compare_nodes(child, existing_node):
+                    closed_list[(child['loc'], child['time'])] = child
+                    push_node(open_list, child)
+            else:
+                closed_list[(child['loc'], child['time'])] = child
+                push_node(open_list, child)
 
-        disjoint    - use disjoint splitting or not
-        """
-
-        self.start_time = timer.time()
-
-        # Generate the root node
-        # constraints   - list of constraints
-        # paths         - list of paths, one for each agent
-        #               [[(x11, y11), (x12, y12), ...], [(x21, y21), (x22, y22), ...], ...]
-        # collisions     - list of collisions in paths
-        root = {'cost': 0,
-                'constraints': [],
-                'paths': [],
-                'collisions': []}
-        for i in range(self.num_of_agents):  # Find initial path for each agent
-            path = a_star(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
-                          i, root['constraints'])
-            if path is None:
-                raise BaseException('No solutions')
-            root['paths'].append(path)
-
-        root['cost'] = get_sum_of_cost(root['paths'])
-        root['collisions'] = detect_collisions(root['paths'])
-        self.push_node(root)  # push to open list
-
-        # Task 3.1: Testing
-        # print("collisions")
-        # print(root['collisions'])
-
-        # Task 3.2: Testing
-        # print("constraints")
-        # for collision in root['collisions']:
-        #     print(standard_splitting(collision))
-
-        ##############################
-        # Task 3.3: High-Level Search
-        #           Repeat the following as long as the open list is not empty:
-        #             1. Get the next node from the open list (you can use self.pop_node()
-        #             2. If this node has no collision, return solution
-        #             3. Otherwise, choose the first collision and convert to a list of constraints (using your
-        #                standard_splitting function). Add a new child node to your open list for each constraint
-        #           Ensure to create a copy of any objects that your child nodes might inherit
-
-        while (len(self.open_list) > 0):
-            p = self.pop_node()
-            collisions = detect_collisions(p['paths'])
-            p['collisions'] = collisions
-            if (len(collisions) == 0):
-                self.print_results(p)
-                print("path")
-                print(p['paths'])
-                return p['paths']
-            collision = collisions[0]
-            constraints = standard_splitting(collision)
-
-            for constraint in constraints:
-                child = {'cost': 0, 'constraints': [],
-                         'paths': [], 'collisions': []}
-
-                if len(constraint['loc']) >= 3:
-                    continue
-
-                if isinstance(constraint, dict):
-                    child['constraints'].append(constraint)
-                for constraintP in p['constraints']:
-                    child['constraints'].append(constraintP)
-
-                child['paths'] = p['paths']
-                child['collisions'] = detect_collisions(child['paths'])
-                child['cost'] = get_sum_of_cost(child['paths'])
-
-                agent = constraint['agent']
-                paths = a_star(self.my_map, self.starts[agent], self.goals[agent],
-                               self.heuristics[agent], agent, child['constraints'])
-                if paths is not None:
-                    child['paths'][agent] = paths
-                    child['collisions'] = detect_collisions(child['paths'])
-                    child['cost'] = get_sum_of_cost(child['paths'])
-                    print("!!!!!!!!!!!")
-                    print("child = " + str(child))
-                    self.push_node(child)
-
-        return BaseException('No solutions')
-
-        # solution return before no high level implimentation
-        # self.print_results(root)
-        # return root['paths']
-
-    def print_results(self, node):
-        print("\n Found a solution! \n")
-        CPU_time = timer.time() - self.start_time
-        print("CPU time (s):    {:.2f}".format(CPU_time))
-        print("Sum of costs:    {}".format(get_sum_of_cost(node['paths'])))
-        print("Expanded nodes:  {}".format(self.num_of_expanded))
-        print("Generated nodes: {}".format(self.num_of_generated))
-        print(node['paths'])
+    return None  # Failed to find solutions
