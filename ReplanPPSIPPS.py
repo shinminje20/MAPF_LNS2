@@ -56,7 +56,7 @@ def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanc
 
     start = timer.time()
     while numCp != 0:
-        if timer.time() - start == timeLimit:
+        if timer.time() - start >= timeLimit:
             return None
         paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp)
 
