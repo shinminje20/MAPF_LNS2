@@ -27,6 +27,9 @@ if __name__ == '__main__':
     
     parser.add_argument('--time_limit', type=int, default=60,
                         help='time_limits for test, defaults to 1 min(60secs)')
+
+    parser.add_argument('--sample_size', type=int, default=1,
+                        help='number of times to run solver for each instance')
     
     args = parser.parse_args()
     
@@ -37,39 +40,47 @@ if __name__ == '__main__':
     result_file_name = "results/results_" + filename + "_" + args.solver + ".csv"
     # raise 'asdf'
     result_file = open(result_file_name, "w", buffering=1)
-    
+    timeLimit = args.time_limit #seconds
+    numNeighbour = args.num_neighbour    
+    sample_size = args.sample_size
+
     for file in sorted(glob.glob(args.instance)):
+    
+        for i in range(sample_size):
+            paths = None
+            unsolved_count = 0
+                while paths == None:
+                print("***Import an instance***")
+
+                instanceMap, instanceStarts, instanceGoals = loadScen(file, args.num_agents)
+                print(file)
+                print(instanceMap, instanceStarts, instanceGoals)
+                map_width = len(instanceMap[0])
+                map_height = len(instanceMap)
+
+
+                startTime = timer.time_ns()
+                if args.solver == "PPSIPPS":
+                    print("***Run LNS2 PP with SIPPS***")
+                    print("running file: ", file)
+                    paths = LNS2PP(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
+
+                elif args.solver == "CBSSIPPS":
+                    print("***Run LNS2 CBS with SIPPS***")
+                    print("running file: ", file)
+                    paths = LNS2CBS(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
         
+                else:
+                    raise RuntimeError("Unknown solver!")
+                endTime = timer.time_ns()
+                duration = endTime - startTime
 
-        print("***Import an instance***")
+                if paths = None:
+                    unsolved_count += 1
 
-        instanceMap, instanceStarts, instanceGoals = loadScen(file, args.num_agents)
-        print(file)
-        print(instanceMap, instanceStarts, instanceGoals)
-        map_width = len(instanceMap[0])
-        map_height = len(instanceMap)
-        timeLimit = args.time_limit #seconds
-        numNeighbour = args.num_neighbour
 
-        startTime = timer.time_ns()
-        if args.solver == "PPSIPPS":
-            print("***Run LNS2 PP with SIPPS***")
-            print("running file: ", file)
-            paths = LNS2PP(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
-
-        elif args.solver == "CBSSIPPS":
-            print("***Run LNS2 CBS with SIPPS***")
-            print("running file: ", file)
-            paths = LNS2CBS(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
-        
-        else:
-            raise RuntimeError("Unknown solver!")
-        endTime = timer.time_ns()
-        duration = endTime - startTime
-
-        #print(paths)
-        cost = get_sum_of_cost(paths)
-        result_file.write("{},{},{}\n".format(file, cost, duration))
+            cost = get_sum_of_cost(paths)
+            result_file.write("{},{},{}\n".format(file, cost, duration, unsolved_count))
 
 
     result_file.close()
