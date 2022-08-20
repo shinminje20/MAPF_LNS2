@@ -63,7 +63,7 @@ def standard_splitting(collision):
         constraints.append({'agent': collision['a1'], 'loc': collision['loc'][0], 'timestep': collision['timestep']})
         constraints.append({'agent': collision['a2'], 'loc': collision['loc'][0], 'timestep': collision['timestep']})
     else:
-        constraints.append({'agent': collision['a1'], 'loc': (collision['loc'][1], collision['loc'][0]), 'timestep': collision['timestep']})
+        constraints.append({'agent': collision['a1'], 'loc': (collision['loc'][0], collision['loc'][1]), 'timestep': collision['timestep']})
         constraints.append({'agent': collision['a2'], 'loc': (collision['loc'][1], collision['loc'][0]), 'timestep': collision['timestep']})
     return constraints
 
@@ -181,7 +181,7 @@ class CBSSolver(object):
                 #add new constraint
                 agent = con['agent']
                 childCons.append(con)
-
+                #print(childCons)
                 #build constraint table for this node
                 hard_constraints = copy.copy(init_constraints)
                 for con2 in childCons:

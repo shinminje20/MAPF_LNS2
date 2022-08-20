@@ -49,7 +49,7 @@ if __name__ == '__main__':
         for i in range(sample_size):
             paths = None
             unsolved_count = 0
-                while paths == None:
+            while paths == None:
                 print("***Import an instance***")
 
                 instanceMap, instanceStarts, instanceGoals = loadScen(file, args.num_agents)
@@ -75,7 +75,7 @@ if __name__ == '__main__':
                 endTime = timer.time_ns()
                 duration = endTime - startTime
 
-                if paths = None:
+                if paths == None:
                     unsolved_count += 1
 
 
