@@ -65,7 +65,7 @@ def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanc
         if paths == None:
             return None
             
-    return paths
+    return paths, replan_count
 
 # if __name__ == "__main__":
 #     numNeighbourhood = 5

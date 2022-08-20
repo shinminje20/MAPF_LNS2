@@ -170,7 +170,7 @@ class CBSSolver(object):
         while len(self.open_list) > 0:
             currNode = self.pop_node()
             if len(currNode['collisions']) == 0:
-                self.print_results(currNode)
+                #self.print_results(currNode)
                 return currNode['paths']
             newConstraints = standard_splitting(currNode['collisions'][0]) #only standard splitting usable with SIPPS
             for con in newConstraints:
