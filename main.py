@@ -61,12 +61,12 @@ if __name__ == '__main__':
                 if args.solver == "PPSIPPS":
                     print("***Run LNS2 PP with SIPPS***")
                     print("running file: ", file)
-                    paths, startTime = LNS2PP(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
+                    paths, startTime, replan_count = LNS2PP(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
 
                 elif args.solver == "CBSSIPPS":
                     print("***Run LNS2 CBS with SIPPS***")
                     print("running file: ", file)
-                    paths, startTime = LNS2CBS(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
+                    paths, startTime, replan_count = LNS2CBS(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
         
                 else:
                     raise RuntimeError("Unknown solver!")
@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
 
             cost = get_sum_of_cost(paths)
-            result_file.write("{},{},{}\n".format(file, cost, duration, unsolved_count))
+            result_file.write("{},{},{}\n".format(file, cost, duration, replan_count, unsolved_count))
 
 
     result_file.close()

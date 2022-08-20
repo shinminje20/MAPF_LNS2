@@ -104,18 +104,19 @@ def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instan
     numCp = sum(deg(paths))
     start = timer.time()    
     if (numCp == 0):
-        return paths, start
+        return paths, start, 0
 
     ALNS_weight = [1, 1, 1]
     ALNS_r = 0.1
 
-
+    replan_counter = 0
     while numCp != 0:
         paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp, timeLimit, start)
+        replan_counter += 1
         if paths == None:
-            return None, None
+            return None, None, None
 
-    return paths, start
+    return paths, start, replan_counter
 
 
 if __name__ == "__main__":
