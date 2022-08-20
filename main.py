@@ -39,7 +39,7 @@ if __name__ == '__main__':
     filename = args.instance
     filename = filename.replace("/", "_").replace("-", "_").replace(".scen", "").replace("*", "")
     # filename = filename.replace(".scen", '').replace("*")
-    result_file_name = "results/results_" + filename + "_" + args.solver + ".csv"
+    result_file_name = "results/results_" + filename + "_" + args.solver + "_" + args.num_agents + "_" + args.num_neighbour + "_" + args.time_limit + "_" + args.num_iteration + ".csv"
     # raise 'asdf'
     result_file = open(result_file_name, "w", buffering=1)
     timeLimit = args.time_limit #seconds
