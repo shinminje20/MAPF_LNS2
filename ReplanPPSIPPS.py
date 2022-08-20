@@ -8,8 +8,11 @@ from LNSUtil import *
 import time as timer
 
 # replan untill collision free
-def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP):
+def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP, timeLimit, start):
     # select a neighbourhood construction method
+    currTime = timer.time()
+    if currTime - start >= timeLimit:
+        return None, None
 
     # 0: collision, 1: failure, 2: random
     neighbourhood_kind = ALNS(ALNS_weight)
@@ -56,9 +59,7 @@ def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanc
 
     start = timer.time()
     while numCp != 0:
-        if timer.time() - start >= timeLimit:
-            return None
-        paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp)
+        paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp, timeLimit, start)
 
     return paths
 
