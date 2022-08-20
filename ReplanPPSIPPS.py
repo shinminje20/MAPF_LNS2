@@ -8,11 +8,8 @@ from LNSUtil import *
 import time as timer
 
 # replan untill collision free
-def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP, timeLimit, start):
+def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP, start):
     # select a neighbourhood construction method
-    currTime = timer.time()
-    if currTime - start >= timeLimit:
-        return None, None
 
     # 0: collision, 1: failure, 2: random
     neighbourhood_kind = ALNS(ALNS_weight)
@@ -43,7 +40,7 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
     return paths, prevCP
 
 
-def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, timeLimit):
+def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
     paths = list(range(len(instanceGoals)))
     neighbourhood, newPaths = prioritized_planning([], list(range(len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
     for i in range(len(neighbourhood)):
@@ -52,7 +49,7 @@ def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanc
     numCp = 0
     numCp = sum(deg(paths))
     if (numCp == 0):
-        return paths
+        return paths, 0
 
     ALNS_weight = [1, 1, 1]
     ALNS_r = 0.1
@@ -60,10 +57,8 @@ def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanc
     start = timer.time()
     replan_count = 0
     while numCp != 0:
-        paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp, timeLimit, start)
+        paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp, start)
         replan_count += 1
-        if paths == None:
-            return None
             
     return paths, replan_count
 

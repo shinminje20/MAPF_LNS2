@@ -91,7 +91,7 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
     return paths, prevCP
 
 
-def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, timeLimit):
+def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
     paths = list(range(len(instanceGoals)))
     neighbourhood, newPaths = prioritized_planning([], list(range(len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
     for i in range(len(neighbourhood)):
@@ -100,29 +100,25 @@ def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instan
     numCp = 0
     numCp = sum(deg(paths))
     if (numCp == 0):
-        return paths
+        return paths, 0
 
     ALNS_weight = [1, 1, 1]
     ALNS_r = 0.1
 
-    timelimit = 1 * 60
-    start = timer.time()
     replan_count = 0
     while numCp != 0:
-        if timer.time() - start >= timeLimit:
-            return None
         paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp)
         replan_count += 1
 
     return paths, replan_count
 
 
-if __name__ == "__main__":
-    numNeighbourhood = 5
-    numAgent = 10
-    instanceMap, instanceStarts, instanceGoals = loadScen('room-32-32-4-even-11.scen', numAgent)
-    paths = LNS2(numNeighbourhood, len(instanceMap[0]), len(instanceMap), instanceMap,
-                instanceStarts, instanceGoals)
-    print("solution")
-    for path in paths:
-        print(path)
+# if __name__ == "__main__":
+#     numNeighbourhood = 5
+#     numAgent = 10
+#     instanceMap, instanceStarts, instanceGoals = loadScen('room-32-32-4-even-11.scen', numAgent)
+#     paths = LNS2(numNeighbourhood, len(instanceMap[0]), len(instanceMap), instanceMap,
+#                 instanceStarts, instanceGoals)
+#     print("solution")
+#     for path in paths:
+#         print(path)
