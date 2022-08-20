@@ -1,0 +1,175 @@
+Start file: scen\room-32-32-4-even-1.scen,
+iteration: 0, cost: 415, duration: 126045600, num_raplans: 3
+iteration: 1, cost: 426, duration: 210033300, num_raplans: 5
+iteration: 2, cost: 412, duration: 199864300, num_raplans: 5
+Instance summary: num_iteration:3, avg_cost: 417.6666666666667, avg_duration: 178647733.33333334, avg_replans: 4, std_duration: 45837653.33940355, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-10.scen,
+iteration: 0, cost: 407, duration: 112999000, num_raplans: 1
+iteration: 1, cost: 424, duration: 121996800, num_raplans: 1
+iteration: 2, cost: 364, duration: 105033900, num_raplans: 1
+Instance summary: num_iteration:3, avg_cost: 398.3333333333333, avg_duration: 113343233.33333333, avg_replans: 1, std_duration: 8486687.60726665, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-11.scen,
+iteration: 0, cost: 282, duration: 98998500, num_raplans: 1
+iteration: 1, cost: 342, duration: 240000300, num_raplans: 4
+iteration: 2, cost: 296, duration: 127998100, num_raplans: 2
+Instance summary: num_iteration:3, avg_cost: 306.6666666666667, avg_duration: 155665633.33333334, avg_replans: 2, std_duration: 74461373.88856946, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-12.scen,
+iteration: 0, cost: 375, duration: 72999600, num_raplans: 0
+iteration: 1, cost: 394, duration: 97999300, num_raplans: 1
+iteration: 2, cost: 384, duration: 90999700, num_raplans: 1
+Instance summary: num_iteration:3, avg_cost: 384.3333333333333, avg_duration: 87332866.66666667, avg_replans: 0, std_duration: 12896918.238220066, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-13.scen,
+iteration: 0, cost: 409, duration: 70002200, num_raplans: 0
+iteration: 1, cost: 405, duration: 95999800, num_raplans: 1
+iteration: 2, cost: 406, duration: 61999100, num_raplans: 0
+Instance summary: num_iteration:3, avg_cost: 406.6666666666667, avg_duration: 76000366.66666667, avg_replans: 0, std_duration: 17776259.523401804, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-14.scen,
+iteration: 0, cost: 550, duration: 191999600, num_raplans: 4
+iteration: 1, cost: 554, duration: 384000500, num_raplans: 9
+iteration: 2, cost: 572, duration: 332998700, num_raplans: 7
+Instance summary: num_iteration:3, avg_cost: 558.6666666666666, avg_duration: 302999600, avg_replans: 6, std_duration: 99453737.49040304, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-15.scen,
+iteration: 0, cost: 423, duration: 109000700, num_raplans: 2
+iteration: 1, cost: 430, duration: 104000000, num_raplans: 1
+iteration: 2, cost: 439, duration: 135998400, num_raplans: 3
+Instance summary: num_iteration:3, avg_cost: 430.6666666666667, avg_duration: 116333033.33333333, avg_replans: 2, std_duration: 17213272.051627293, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-16.scen,
+iteration: 0, cost: 435, duration: 151999200, num_raplans: 4
+iteration: 1, cost: 435, duration: 140996400, num_raplans: 4
+iteration: 2, cost: 431, duration: 110024400, num_raplans: 2
+Instance summary: num_iteration:3, avg_cost: 433.6666666666667, avg_duration: 134340000, avg_replans: 3, std_duration: 21764689.395440497, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-17.scen,
+iteration: 0, cost: 347, duration: 59029200, num_raplans: 0
+iteration: 1, cost: 348, duration: 64000800, num_raplans: 0
+iteration: 2, cost: 350, duration: 108029300, num_raplans: 2
+Instance summary: num_iteration:3, avg_cost: 348.3333333333333, avg_duration: 77019766.66666667, avg_replans: 0, std_duration: 26969845.56506272, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-18.scen,
+iteration: 0, cost: 348, duration: 109999400, num_raplans: 2
+iteration: 1, cost: 346, duration: 103000300, num_raplans: 2
+iteration: 2, cost: 382, duration: 98997400, num_raplans: 1
+Instance summary: num_iteration:3, avg_cost: 358.6666666666667, avg_duration: 103999033.33333333, avg_replans: 1, std_duration: 5568581.704826942, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-19.scen,
+iteration: 0, cost: 496, duration: 123000400, num_raplans: 2
+iteration: 1, cost: 501, duration: 113997800, num_raplans: 1
+iteration: 2, cost: 495, duration: 207999900, num_raplans: 4
+Instance summary: num_iteration:3, avg_cost: 497.3333333333333, avg_duration: 148332700, avg_replans: 2, std_duration: 51868996.217104495, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-2.scen,
+iteration: 0, cost: 421, duration: 116996600, num_raplans: 2
+iteration: 1, cost: 410, duration: 87031100, num_raplans: 1
+iteration: 2, cost: 429, duration: 108027400, num_raplans: 2
+Instance summary: num_iteration:3, avg_cost: 420, avg_duration: 104018366.66666667, avg_replans: 1, std_duration: 15379761.33635803, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-20.scen,
+iteration: 0, cost: 395, duration: 62000800, num_raplans: 0
+iteration: 1, cost: 417, duration: 113033200, num_raplans: 2
+iteration: 2, cost: 402, duration: 164999900, num_raplans: 3
+Instance summary: num_iteration:3, avg_cost: 404.6666666666667, avg_duration: 113344633.33333333, avg_replans: 1, std_duration: 51500256.24444342, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-21.scen,
+iteration: 0, cost: 369, duration: 209998700, num_raplans: 6
+iteration: 1, cost: 399, duration: 117998300, num_raplans: 2
+iteration: 2, cost: 351, duration: 80030500, num_raplans: 1
+Instance summary: num_iteration:3, avg_cost: 373, avg_duration: 136009166.66666666, avg_replans: 3, std_duration: 66829834.216264024, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-22.scen,
+iteration: 0, cost: 340, duration: 103030400, num_raplans: 2
+iteration: 1, cost: 335, duration: 79000600, num_raplans: 1
+iteration: 2, cost: 354, duration: 104026000, num_raplans: 2
+Instance summary: num_iteration:3, avg_cost: 343, avg_duration: 95352333.33333333, avg_replans: 1, std_duration: 14169763.30406875, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-23.scen,
+iteration: 0, cost: 377, duration: 80029000, num_raplans: 1
+iteration: 1, cost: 379, duration: 92028500, num_raplans: 1
+iteration: 2, cost: 363, duration: 56032400, num_raplans: 0
+Instance summary: num_iteration:3, avg_cost: 373, avg_duration: 76029966.66666667, avg_replans: 0, std_duration: 18328229.71547807, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-24.scen,
+iteration: 0, cost: 479, duration: 65029900, num_raplans: 0
+iteration: 1, cost: 490, duration: 93028400, num_raplans: 1
+iteration: 2, cost: 482, duration: 66999200, num_raplans: 0
+Instance summary: num_iteration:3, avg_cost: 483.6666666666667, avg_duration: 75019166.66666667, avg_replans: 0, std_duration: 15627504.585292347, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-25.scen,
+iteration: 0, cost: 401, duration: 115029600, num_raplans: 2
+iteration: 1, cost: 378, duration: 60030400, num_raplans: 0
+iteration: 2, cost: 396, duration: 104999400, num_raplans: 1
+Instance summary: num_iteration:3, avg_cost: 391.6666666666667, avg_duration: 93353133.33333333, avg_replans: 1, std_duration: 29290862.834906954, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-3.scen,
+iteration: 0, cost: 403, duration: 134999400, num_raplans: 2
+iteration: 1, cost: 342, duration: 84000100, num_raplans: 1
+iteration: 2, cost: 386, duration: 194001000, num_raplans: 5
+Instance summary: num_iteration:3, avg_cost: 377, avg_duration: 137666833.33333334, avg_replans: 2, std_duration: 55048940.958417475, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-4.scen,
+iteration: 0, cost: 416, duration: 204027700, num_raplans: 5
+iteration: 1, cost: 397, duration: 111000600, num_raplans: 2
+iteration: 2, cost: 431, duration: 108033000, num_raplans: 1
+Instance summary: num_iteration:3, avg_cost: 414.6666666666667, avg_duration: 141020433.33333334, avg_replans: 2, std_duration: 54586064.17432322, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-5.scen,
+iteration: 0, cost: 430, duration: 62944600, num_raplans: 0
+iteration: 1, cost: 444, duration: 66038900, num_raplans: 0
+iteration: 2, cost: 433, duration: 61998000, num_raplans: 0
+Instance summary: num_iteration:3, avg_cost: 435.6666666666667, avg_duration: 63660500, avg_replans: 0, std_duration: 2113433.890614987, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-6.scen,
+iteration: 0, cost: 552, duration: 193032700, num_raplans: 3
+iteration: 1, cost: 518, duration: 204996800, num_raplans: 4
+iteration: 2, cost: 525, duration: 286994900, num_raplans: 6
+Instance summary: num_iteration:3, avg_cost: 531.6666666666666, avg_duration: 228341466.66666666, avg_replans: 4, std_duration: 51146396.29087599, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-7.scen,
+iteration: 0, cost: 294, duration: 101022300, num_raplans: 2
+iteration: 1, cost: 305, duration: 81999800, num_raplans: 1
+iteration: 2, cost: 297, duration: 93001900, num_raplans: 1
+Instance summary: num_iteration:3, avg_cost: 298.6666666666667, avg_duration: 92008000, avg_replans: 1, std_duration: 9550118.034349104, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-8.scen,
+iteration: 0, cost: 285, duration: 59003800, num_raplans: 0
+iteration: 1, cost: 285, duration: 54031800, num_raplans: 0
+iteration: 2, cost: 285, duration: 79998900, num_raplans: 1
+Instance summary: num_iteration:3, avg_cost: 285, avg_duration: 64344833.333333336, avg_replans: 0, std_duration: 13782871.558689551, success_ratio: 100.0%
+
+
+Start file: scen\room-32-32-4-even-9.scen,
+iteration: 0, cost: 457, duration: 64997400, num_raplans: 0
+iteration: 1, cost: 459, duration: 65999100, num_raplans: 0
+iteration: 2, cost: 454, duration: 62022500, num_raplans: 0
+Instance summary: num_iteration:3, avg_cost: 456.6666666666667, avg_duration: 64339666.666666664, avg_replans: 0, std_duration: 2068283.525857452, success_ratio: 100.0%
+
+

@@ -1,0 +1,28 @@
+file: scen\room-32-32-4-even-1.scen, avg_cost: 5567.4, num_iteration:10, avg_duration: 6885507360, std_duration: 825671684.5900114
+file: scen\room-32-32-4-even-10.scen, avg_cost: 6034.1, num_iteration:10, avg_duration: 11134305360, std_duration: 5294849187.416577
+file: scen\room-32-32-4-even-11.scen, avg_cost: 3149.9, num_iteration:10, avg_duration: 2648502080, std_duration: 534167106.39116544
+file: scen\room-32-32-4-even-12.scen, avg_cost: 4677.8, num_iteration:10, avg_duration: 4869719330, std_duration: 1693161299.5136313
+file: scen\room-32-32-4-even-13.scen, avg_cost: 4830.3, num_iteration:10, avg_duration: 5186659980, std_duration: 897864807.5390648
+file: scen\room-32-32-4-even-14.scen, avg_cost: 5790.6, num_iteration:10, avg_duration: 6802217360, std_duration: 958190282.7967883
+file: scen\room-32-32-4-even-15.scen, avg_cost: 4648.8, num_iteration:10, avg_duration: 5244414600, std_duration: 920284534.5486217
+file: scen\room-32-32-4-even-16.scen, avg_cost: 4485.9, num_iteration:10, avg_duration: 4610114220, std_duration: 1089440090.09459
+file: scen\room-32-32-4-even-17.scen, avg_cost: 5663.1, num_iteration:10, avg_duration: 6304822190, std_duration: 717963604.1359811
+file: scen\room-32-32-4-even-18.scen, avg_cost: 4920.8, num_iteration:10, avg_duration: 5552720290, std_duration: 929848666.8481424
+file: scen\room-32-32-4-even-19.scen, avg_cost: 4717.8, num_iteration:10, avg_duration: 5010913240, std_duration: 718784755.7568185
+file: scen\room-32-32-4-even-2.scen, avg_cost: 5591.9, num_iteration:10, avg_duration: 6354817530, std_duration: 801120665.8771131
+file: scen\room-32-32-4-even-20.scen, avg_cost: 4688.5, num_iteration:10, avg_duration: 5167707860, std_duration: 730876142.8102533
+file: scen\room-32-32-4-even-21.scen, avg_cost: 3726.6, num_iteration:10, avg_duration: 3369811500, std_duration: 800716939.3668777
+file: scen\room-32-32-4-even-22.scen, avg_cost: 2354.5, num_iteration:10, avg_duration: 1541421170, std_duration: 230645354.9516614
+file: scen\room-32-32-4-even-23.scen, avg_cost: 4725.7, num_iteration:10, avg_duration: 5144316470, std_duration: 842337263.094437
+file: scen\room-32-32-4-even-24.scen, avg_cost: 3830.7, num_iteration:10, avg_duration: 4452907490, std_duration: 1204973375.6972342
+file: scen\room-32-32-4-even-25.scen, avg_cost: 5947.9, num_iteration:10, avg_duration: 7818635540, std_duration: 1110752868.06327
+file: scen\room-32-32-4-even-3.scen, avg_cost: 5457.1, num_iteration:10, avg_duration: 6584623360, std_duration: 1102442898.3547344
+file: scen\room-32-32-4-even-4.scen, avg_cost: 4579.5, num_iteration:10, avg_duration: 4559093830, std_duration: 1123084349.136028
+file: scen\room-32-32-4-even-5.scen, avg_cost: 4974.4, num_iteration:10, avg_duration: 6767029670, std_duration: 1411808507.8464408
+file: scen\room-32-32-4-even-6.scen, avg_cost: 4793.5, num_iteration:10, avg_duration: 5001113880, std_duration: 665833160.0024352
+file: scen\room-32-32-4-even-7.scen, avg_cost: 4787.5, num_iteration:10, avg_duration: 5488919690, std_duration: 1041300028.16815
+file: scen\room-32-32-4-even-8.scen, avg_cost: 5769.8, num_iteration:10, avg_duration: 6910028250, std_duration: 1262482954.7154496
+file: scen\room-32-32-4-even-9.scen, avg_cost: 5719.1, num_iteration:10, avg_duration: 6647029280, std_duration: 1299381016.713668
+
+
+Instance summary: num_iteration for each case: 10, instance_avg_duration: 5602294061, num_time_exceeded: 0, success_ratio: 100.0%
