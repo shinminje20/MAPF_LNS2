@@ -8,7 +8,6 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, inst
 	#randomize order of neighbourhood
     neighbourhood = priorityList(neighbourhood)
 
-    #build vertex and edge constraints from paths
     #paths of agents in neighbourhood => soft obstacles
     #paths of agents not in neighbourhood => hard obstacles
 
@@ -17,10 +16,7 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, inst
     hard_obstacles = {}
     for i in range(len(paths)):
         if i not in neighbourhood_set:
-            #TODO implement
             add_constraints_from_path(hard_obstacles, paths[i])
-
-    #build heuristics table
 
     #execute prioritized planning
     # at each iteration, add to soft obstacles using found path
@@ -28,24 +24,15 @@ def prioritized_planning(paths, neighbourhood, instanceMap, instanceStarts, inst
 
     soft_obstacles = {}
     for agent in neighbourhood:
-        #print("|||||| agent", agent)
-        #print("soft_obstacles", soft_obstacles)
-        #print(soft_obstacles)
         agentStart = instanceStarts[agent] #coordinates are in (x, y), map indexing is in [y][x]
         agentGoal = instanceGoals[agent]
 
         #build heuristics table
         h_values = compute_heuristics(instanceMap, agentGoal)
-        #print(h_values)
         agentPath = sipps(instanceMap, agentStart, agentGoal, h_values, hard_obstacles, soft_obstacles)
         newPaths.append(agentPath)
         if agentPath != None:
-            #print("path length", len(agentPath))
             add_constraints_from_path(soft_obstacles, agentPath)
-        
-
-    #for i in range(len(neighbourhood)):
-    #    paths[neighbourhood[i]] = newPaths[i]
 
     return neighbourhood, newPaths
     #newPaths[i] corresponds to agent at neighbourhood[i]

@@ -113,7 +113,7 @@ def failureNeighbourhood(paths, n):
                 neighbourhood.append(A)
             for key in sortedKeys:
                 if len(neighbourhood) + len(sortedDic[key]) < n:
-                    neighbourhood.append(sortedDic[key])
+                    neighbourhood.extend(sortedDic[key])
                 else:
                     count = n - len(neighbourhood)
                     for i in range(count):

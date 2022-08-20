@@ -159,6 +159,7 @@ def get_path(goal_node):
 def sipps(my_map, start_loc, goal_loc, h_values, hard_obstacle, soft_obstacle):    
 
     safe_interval_table = build_safe_interval_table(my_map, hard_obstacle, soft_obstacle)  #my_map is avaialble paths excluding walls
+    #print(safe_interval_table)
 
     root = {'c_val': 0, 'loc': start_loc, 'g_val': 0, 'h_val': h_values[start_loc], 'interval': safe_interval_table[start_loc][0], 'id': 0, 'is_goal': False, 'parent': None}
     lower_bound_timestep = 0
