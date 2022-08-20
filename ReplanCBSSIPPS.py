@@ -8,6 +8,7 @@ from LNSUtil import *
 from pathlib import Path
 from SIPPS2 import *
 from loadscen import *
+import time as timer
 
 def import_mapf_instance(filename):
     f = Path(filename)
@@ -90,7 +91,7 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
     return paths, prevCP
 
 
-def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
+def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, timeLimit):
     paths = list(range(len(instanceGoals)))
     neighbourhood, newPaths = prioritized_planning([], list(range(len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
     for i in range(len(neighbourhood)):
@@ -104,7 +105,11 @@ def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instan
     ALNS_weight = [1, 1, 1]
     ALNS_r = 0.1
 
+    timelimit = 1 * 60
+    start = timer.time()
     while numCp != 0:
+        if timer.time() - start == timelimit:
+            return None
         paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp)
 
     return paths

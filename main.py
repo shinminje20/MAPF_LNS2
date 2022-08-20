@@ -7,6 +7,7 @@ import argparse
 from ReplanCBSSIPPS import LNS2CBS
 from ReplanPPSIPPS import LNS2PP
 import glob
+import time as timer
 
 SOLVER = "PPSIPPS"
 
@@ -44,22 +45,28 @@ if __name__ == '__main__':
         print(instanceMap, instanceStarts, instanceGoals)
         map_width = len(instanceMap[0])
         map_height = len(instanceMap)
-        
+        timeLimit = 60 #seconds
+
+
+        startTime = timer.time_ns()
         if args.solver == "PPSIPPS":
             print("***Run LNS2 PP with SIPPS***")
             print("running file: ", file)
-            paths = LNS2PP(args.num_neighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals)
+            paths = LNS2PP(args.num_neighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
 
         elif args.solver == "CBSSIPPS":
             print("***Run LNS2 CBS with SIPPS***")
             print("running file: ", file)
-            paths = LNS2CBS(args.num_neighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals)
+            paths = LNS2CBS(args.num_neighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
         
         else:
             raise RuntimeError("Unknown solver!")
-        print(paths)
+        endTime = timer.time_ns()
+        duration = endTime - startTime
+
+        #print(paths)
         cost = get_sum_of_cost(paths)
-        result_file.write("{},{}\n".format(file, cost))
+        result_file.write("{},{},{}\n".format(file, cost, duration))
 
 
     result_file.close()

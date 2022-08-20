@@ -5,6 +5,7 @@ from failureBasedNeighbourhood2 import *
 from randomNeighborhood import *
 from prioritizedPlanning import *
 from LNSUtil import *
+import time as timer
 
 # replan untill collision free
 def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP):
@@ -39,7 +40,7 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
     return paths, prevCP
 
 
-def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
+def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, timeLimit):
     paths = list(range(len(instanceGoals)))
     neighbourhood, newPaths = prioritized_planning([], list(range(len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
     for i in range(len(neighbourhood)):
@@ -53,7 +54,10 @@ def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanc
     ALNS_weight = [1, 1, 1]
     ALNS_r = 0.1
 
+    start = timer.time()
     while numCp != 0:
+        if timer.time() - start >= timeLimit:
+            return None
         paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp)
 
     return paths
