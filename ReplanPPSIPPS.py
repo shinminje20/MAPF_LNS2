@@ -41,7 +41,7 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
     return paths, prevCP
 
 
-def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
+def LNS2PP(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
     paths = list(range(len(instanceGoals)))
     neighbourhood, newPaths = prioritized_planning([], list(range(len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
     for i in range(len(neighbourhood)):
@@ -60,13 +60,14 @@ def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceG
 
     return paths
 
-if __name__ == "__main__":
-    numNeighbourhood = 5
-    numAgent = 10
-    instanceMap, instanceStarts, instanceGoals = loadScen('room-32-32-4-even-11.scen', numAgent)
-    paths = LNS2(numNeighbourhood, len(instanceMap[0]), len(instanceMap), instanceMap,
-                instanceStarts, instanceGoals)
+# if __name__ == "__main__":
+#     numNeighbourhood = 5
+#     numAgent = 10
+#     instanceMap, instanceStarts, instanceGoals = loadScen(
+#         'room-32-32-4-even-1.scen', numAgent)
+#     paths = LNS2(numNeighbourhood, len(instanceMap[0]), len(instanceMap), instanceMap,
+#                 instanceStarts, instanceGoals)
 
-    for path in paths:
-        print(path)
+#     for path in paths:
+#         print(path)
 

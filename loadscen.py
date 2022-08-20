@@ -1,5 +1,5 @@
 def loadScen(scenarioFile, numAgents):
-	f = open('scen/' + scenarioFile, 'r')
+	f = open(scenarioFile, 'r')
 	line = f.readline() #version text
 	line = f.readline() #first agent
 	tokens = line.split('\t') 

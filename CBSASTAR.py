@@ -119,7 +119,7 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
     return paths, prevCP
 
 
-def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
+def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
     paths = list(range(len(instanceGoals)))
 
     h_values = []
@@ -149,14 +149,14 @@ def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceG
     return paths
 
 
-if __name__ == "__main__":
-    numNeighbourhood = 3
-    instanceMap, instanceStarts, instanceGoals = import_mapf_instance(
-        "test_24.txt")
-    width = len(instanceMap)
-    height = len(instanceMap[0])
-    paths = LNS2(numNeighbourhood, width, height, instanceMap,
-                 instanceStarts, instanceGoals)
-    print("solution")
-    for path in paths:
-        print(path)
+# if __name__ == "__main__":
+#     numNeighbourhood = 3
+#     instanceMap, instanceStarts, instanceGoals = import_mapf_instance(
+#         "test_24.txt")
+#     width = len(instanceMap)
+#     height = len(instanceMap[0])
+#     paths = LNS2(numNeighbourhood, width, height, instanceMap,
+#                  instanceStarts, instanceGoals)
+#     print("solution")
+#     for path in paths:
+#         print(path)
