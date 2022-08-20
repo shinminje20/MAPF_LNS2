@@ -46,12 +46,9 @@ def import_mapf_instance(filename):
 
 
 # replan untill collision free
-def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP, timeLimit, start):
+def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, prevCP):
     # select a neighbourhood construction method
-    currTime = timer.time()
-    if currTime - start >= timeLimit:
-        return None, None
-        
+
     # 0: collision, 1: failure, 2: random
     neighbourhood_kind = ALNS(ALNS_weight)
 
@@ -108,11 +105,12 @@ def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instan
     ALNS_weight = [1, 1, 1]
     ALNS_r = 0.1
 
+    timelimit = 1 * 60
     start = timer.time()
     while numCp != 0:
-        paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp, timeLimit, start)
-        if paths == None:
+        if timer.time() - start >= timeLimit:
             return None
+        paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp)
 
     return paths
 
