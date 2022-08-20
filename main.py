@@ -4,8 +4,8 @@ from Utils import *
 from LNSUtil import *
 import heapq
 import argparse
-from CBSASTAR import LNS2CBS
-from PPSIPPS import LNS2PP
+from ReplanCBSSIPPS import LNS2CBS
+from ReplanPPSIPPS import LNS2PP
 import glob
 
 SOLVER = "PPSIPPS"
@@ -47,10 +47,12 @@ if __name__ == '__main__':
         
         if args.solver == "PPSIPPS":
             print("***Run LNS2 PP with SIPPS***")
+            print("running file: ", file)
             paths = LNS2PP(args.num_neighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals)
 
         elif args.solver == "CBSSIPPS":
             print("***Run LNS2 CBS with SIPPS***")
+            print("running file: ", file)
             paths = LNS2CBS(args.num_neighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals)
         
         else:

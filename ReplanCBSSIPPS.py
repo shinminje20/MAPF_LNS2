@@ -93,7 +93,7 @@ def replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, 
     return paths, prevCP
 
 
-def LNS2(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
+def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals):
     paths = list(range(len(instanceGoals)))
     neighbourhood, newPaths = prioritized_planning([], list(range(len(instanceGoals))), instanceMap, instanceStarts, instanceGoals)
     for i in range(len(neighbourhood)):
