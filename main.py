@@ -20,10 +20,13 @@ if __name__ == '__main__':
                         help='The solver to use (one of: {CBSSIPPS, PPSIPPS}), defaults to ' + str(SOLVER))
 
     parser.add_argument('--num_agents', type=int, default=10,
-                        help='Number of agents')
+                        help='Number of agents, defaults to 10')
 
     parser.add_argument('--num_neighbour', type=int, default=5,
-                        help='number of neighbourhood')
+                        help='number of neighbourhood, defaults to 5')
+    
+    parser.add_argument('--time_limit', type=int, default=60,
+                        help='time_limits for test, defaults to 1 min(60secs)')
     
     args = parser.parse_args()
     
@@ -31,7 +34,7 @@ if __name__ == '__main__':
     filename = args.instance
     filename = filename.replace("/", "_").replace("-", "_").replace(".scen", "").replace("*", "")
     # filename = filename.replace(".scen", '').replace("*")
-    result_file_name = "results_" + filename + "_" + args.solver + ".csv"
+    result_file_name = "results/results_" + filename + "_" + args.solver + ".csv"
     # raise 'asdf'
     result_file = open(result_file_name, "w", buffering=1)
     
@@ -45,19 +48,19 @@ if __name__ == '__main__':
         print(instanceMap, instanceStarts, instanceGoals)
         map_width = len(instanceMap[0])
         map_height = len(instanceMap)
-        timeLimit = 60 #seconds
-
+        timeLimit = args.time_limit #seconds
+        numNeighbour = args.num_neighbour
 
         startTime = timer.time_ns()
         if args.solver == "PPSIPPS":
             print("***Run LNS2 PP with SIPPS***")
             print("running file: ", file)
-            paths = LNS2PP(args.num_neighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
+            paths = LNS2PP(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
 
         elif args.solver == "CBSSIPPS":
             print("***Run LNS2 CBS with SIPPS***")
             print("running file: ", file)
-            paths = LNS2CBS(args.num_neighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
+            paths = LNS2CBS(numNeighbour, map_width, map_height, instanceMap, instanceStarts, instanceGoals, timeLimit)
         
         else:
             raise RuntimeError("Unknown solver!")
