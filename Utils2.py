@@ -23,7 +23,6 @@ def get_neighbors(curr_loc, my_map):
     
     return next_locs
 
-
 def compute_heuristics(my_map, goal):
     # Use Dijkstra to build a shortest-path tree rooted at the goal location
     open_list = []
@@ -61,7 +60,6 @@ def compute_heuristics(my_map, goal):
         h_values[loc] = node['cost']
     return h_values
 
-
 def get_location(path, time):
     if time < 0:
         return path[0]
@@ -70,16 +68,20 @@ def get_location(path, time):
     else:
         return path[-1]  # wait at the goal location
 
-
 def get_path(goal_node):
-    path = []
-    curr = goal_node
-    while curr is not None:
-        path.append(curr['loc'])
-        curr = curr['parent']
+    #start from goal node going up to parent node
+    #add location of goal node
+    path = [goal_node['loc']]
+    prevNode = goal_node
+    node = goal_node['parent']
+    while node != None:
+        time = prevNode['interval'][0] - node['interval'][0]
+        for i in range(time):
+            path.append(node['loc'])
+        prevNode = node
+        node = node['parent']
     path.reverse()
     return path
-
 
 # safe_interval_table should look like this:
 #       

@@ -3,7 +3,6 @@ import time
 import heapq
 
 def collisionNeighbourhood(paths, N, width, height, instanceMap):
-	#print("colneigh")
 	#organize paths into lookup dictionary
 	timepos = {} # {y, x, t}: [agents...]
 	numAgents = len(paths)
@@ -81,7 +80,7 @@ def collisionNeighbourhood(paths, N, width, height, instanceMap):
 				nextAgent = heapq.heappop(distanceToAgents)
 				neighbourhood.append(nextAgent[1])
 		'''
-		print("random walk fill")
+		#random walk implementation
 		#random walk to find collisions to fill size N neighbourhood
 			#use timepos dictionary to check collisions
 		neighbourhood.extend(connectedComp)
