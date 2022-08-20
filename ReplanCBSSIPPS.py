@@ -105,10 +105,9 @@ def LNS2CBS(numNeighbourhood, width, height, instanceMap, instanceStarts, instan
     ALNS_weight = [1, 1, 1]
     ALNS_r = 0.1
 
-    timelimit = 1 * 60
     start = timer.time()
     while numCp != 0:
-        if timer.time() - start == timelimit:
+        if timer.time() - start == timeLimit:
             return None
         paths, numCp = replan(paths, numNeighbourhood, width, height, instanceMap, instanceStarts, instanceGoals, ALNS_weight, numCp)
 
