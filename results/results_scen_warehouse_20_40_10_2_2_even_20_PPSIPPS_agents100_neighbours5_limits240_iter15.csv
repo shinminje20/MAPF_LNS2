@@ -1,0 +1,19 @@
+Start file: scen/warehouse-20-40-10-2-2-even-20.scen,
+iteration: 0, cost: 23189, duration: 64878656396, num_raplans: 5
+iteration: 1, cost: 23250, duration: 85969495182, num_raplans: 9
+iteration: 2, cost: 23339, duration: 72351807838, num_raplans: 5
+iteration: 3, cost: 23247, duration: 77495158773, num_raplans: 6
+iteration: 4, cost: 23360, duration: 85799263050, num_raplans: 9
+iteration: 5, cost: 22963, duration: 80854988129, num_raplans: 8
+iteration: 6, cost: 23384, duration: 101087506169, num_raplans: 10
+iteration: 7, cost: 23013, duration: 76525866654, num_raplans: 7
+iteration: 8, cost: 23695, duration: 85958235986, num_raplans: 8
+iteration: 9, cost: 23151, duration: 93970989979, num_raplans: 11
+iteration: 10, cost: 23339, duration: 80806982837, num_raplans: 6
+iteration: 11, cost: 23609, duration: 102034538018, num_raplans: 11
+iteration: 12, cost: 23014, duration: 99512782323, num_raplans: 13
+iteration: 13, cost: 23187, duration: 81869341960, num_raplans: 9
+iteration: 14, cost: 23266, duration: 60977780060, num_raplans: 3
+Instance summary: num_iteration:15, avg_cost: 23267.066666666666, avg_duration: 83339559556.93333, avg_replans: 8, std_duration: 12293532771.043777, success_ratio: 100.0%
+
+

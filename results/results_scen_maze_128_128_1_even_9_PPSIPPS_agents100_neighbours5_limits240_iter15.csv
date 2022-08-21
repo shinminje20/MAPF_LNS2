@@ -1,0 +1,5 @@
+Start file: scen/maze-128-128-1-even-9.scen,
+iteration: 0, cost: 56992, duration: 87890995504, num_raplans: 13
+iteration: 1, cost: 55071, duration: 85637185605, num_raplans: 14
+iteration: 2, cost: 53204, duration: 82866339226, num_raplans: 14
+iteration: 3, cost: 51678, duration: 63864266965, num_raplans: 10

@@ -1,0 +1,19 @@
+Start file: scen/Berlin_1_256-random-15.scen,
+iteration: 0, cost: 19774, duration: 95120551361, num_raplans: 10
+iteration: 1, cost: 19699, duration: 110591407716, num_raplans: 14
+iteration: 2, cost: 19570, duration: 82641234102, num_raplans: 7
+iteration: 3, cost: 19727, duration: 73619989281, num_raplans: 5
+iteration: 4, cost: 19565, duration: 61432757838, num_raplans: 2
+iteration: 5, cost: 19673, duration: 92642700494, num_raplans: 9
+iteration: 6, cost: 19773, duration: 99014741420, num_raplans: 10
+iteration: 7, cost: 19589, duration: 116182311693, num_raplans: 13
+iteration: 8, cost: 19612, duration: 70845273273, num_raplans: 4
+iteration: 9, cost: 19645, duration: 94197627266, num_raplans: 10
+iteration: 10, cost: 19552, duration: 66771102030, num_raplans: 3
+iteration: 11, cost: 19658, duration: 74688143664, num_raplans: 5
+iteration: 12, cost: 19608, duration: 67557273627, num_raplans: 3
+iteration: 13, cost: 19732, duration: 74174695222, num_raplans: 4
+iteration: 14, cost: 19445, duration: 74539275493, num_raplans: 5
+Instance summary: num_iteration:15, avg_cost: 19641.466666666667, avg_duration: 83601272298.66667, avg_replans: 6, std_duration: 16690641683.900362, success_ratio: 100.0%
+
+

@@ -1,0 +1,13 @@
+Start file: scen/Berlin_1_256-even-23.scen,
+iteration: 0, cost: 22220, duration: 78736651951, num_raplans: 6
+iteration: 1, cost: 21979, duration: 73765494219, num_raplans: 5
+iteration: 2, cost: 21947, duration: 63895189164, num_raplans: 2
+iteration: 3, cost: 21819, duration: 69860486117, num_raplans: 4
+iteration: 4, cost: 22039, duration: 91039229206, num_raplans: 9
+iteration: 5, cost: 22178, duration: 68829276442, num_raplans: 3
+iteration: 6, cost: 22343, duration: 89224478067, num_raplans: 8
+iteration: 7, cost: 21821, duration: 67654404704, num_raplans: 4
+iteration: 8, cost: 21986, duration: 100561178961, num_raplans: 12
+iteration: 9, cost: 21942, duration: 112195906392, num_raplans: 15
+iteration: 10, cost: 21864, duration: 57222519033, num_raplans: 1
+iteration: 11, cost: 21944, duration: 67181677862, num_raplans: 3

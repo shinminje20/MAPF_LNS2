@@ -1,0 +1,23 @@
+Start file: scen/warehouse-10-20-10-2-1-random-10.scen,
+iteration: 0, cost: 10601, duration: 28925004297, num_raplans: 20
+iteration: 1, cost: 10038, duration: 25399913740, num_raplans: 18
+iteration: 2, cost: 10486, duration: 35717534313, num_raplans: 25
+iteration: 3, cost: 10213, duration: 29603677105, num_raplans: 19
+iteration: 4, cost: 10511, duration: 28328936161, num_raplans: 19
+iteration: 5, cost: 10316, duration: 19068372188, num_raplans: 10
+iteration: 6, cost: 10069, duration: 25515152034, num_raplans: 18
+iteration: 7, cost: 10090, duration: 22522114722, num_raplans: 16
+iteration: 8, cost: 9875, duration: 19663024713, num_raplans: 13
+iteration: 9, cost: 10429, duration: 30395589238, num_raplans: 21
+iteration: 10, cost: 9879, duration: 22571956940, num_raplans: 17
+iteration: 11, cost: 10352, duration: 23324677793, num_raplans: 13
+iteration: 12, cost: 10382, duration: 28515542951, num_raplans: 19
+iteration: 13, cost: 10050, duration: 21801743235, num_raplans: 14
+iteration: 14, cost: 10261, duration: 21146570526, num_raplans: 12
+Instance summary: num_iteration:15, avg_cost: 10236.8, avg_duration: 25499987330.4, avg_replans: 16, std_duration: 4662012741.809681, success_ratio: 100.0%
+
+Instance_summary: num_iteration: 15, avg_cost: 10236.8, avg_duration: 25499987330.4, avg_replans: 16, pstd_duration: 4503932202.473311, success_ratio: 100.0%
+Instance_summary: num_iteration:  15, avg_cost: 10236.8, avg_duration: 25499987330.4, avg_replans: 16, pstd_duration: 4503932202.473311, success_ratio: 100.0%
+Instance_summary: num_iteration:   15, avg_cost: 10236.8, avg_duration: 25499987330.4, avg_replans: 16, pstd_duration: 4503932202.473311, success_ratio: 100.0%
+Instance_summary: num_iteration:    15, avg_cost: 10236.8, avg_duration: 25499987330.4, avg_replans: 16, pstd_duration: 4503932202.473311, success_ratio: 100.0%
+

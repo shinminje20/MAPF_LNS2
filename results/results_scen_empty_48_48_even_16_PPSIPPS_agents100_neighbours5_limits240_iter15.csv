@@ -1,0 +1,23 @@
+Start file: scen/empty-48-48-even-16.scen,
+iteration: 0, cost: 3849, duration: 11798177447, num_raplans: 21
+iteration: 1, cost: 3722, duration: 7531298337, num_raplans: 10
+iteration: 2, cost: 3691, duration: 10380384538, num_raplans: 18
+iteration: 3, cost: 3815, duration: 9349799998, num_raplans: 14
+iteration: 4, cost: 3726, duration: 9133316711, num_raplans: 15
+iteration: 5, cost: 3644, duration: 10539848305, num_raplans: 19
+iteration: 6, cost: 3841, duration: 11859471379, num_raplans: 21
+iteration: 7, cost: 3867, duration: 12869331303, num_raplans: 24
+iteration: 8, cost: 3747, duration: 10700852383, num_raplans: 18
+iteration: 9, cost: 3784, duration: 10347196256, num_raplans: 18
+iteration: 10, cost: 3699, duration: 10208719263, num_raplans: 17
+iteration: 11, cost: 3886, duration: 11934087462, num_raplans: 20
+iteration: 12, cost: 3764, duration: 11015158794, num_raplans: 19
+iteration: 13, cost: 3793, duration: 11085001081, num_raplans: 20
+iteration: 14, cost: 3750, duration: 11232620970, num_raplans: 20
+Instance summary: num_iteration:15, avg_cost: 3771.866666666667, avg_duration: 10665684281.8, avg_replans: 18, std_duration: 1312161455.657761, success_ratio: 100.0%
+
+Instance_summary: num_iteration: 15, avg_cost: 3771.866666666667, avg_duration: 10665684281.8, avg_replans: 18, pstd_duration: 1267668400.3843307, success_ratio: 100.0%
+Instance_summary: num_iteration:  15, avg_cost: 3771.866666666667, avg_duration: 10665684281.8, avg_replans: 18, pstd_duration: 1267668400.3843307, success_ratio: 100.0%
+Instance_summary: num_iteration:   15, avg_cost: 3771.866666666667, avg_duration: 10665684281.8, avg_replans: 18, pstd_duration: 1267668400.3843307, success_ratio: 100.0%
+Instance_summary: num_iteration:    15, avg_cost: 3771.866666666667, avg_duration: 10665684281.8, avg_replans: 18, pstd_duration: 1267668400.3843307, success_ratio: 100.0%
+

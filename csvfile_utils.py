@@ -20,7 +20,9 @@ def calculate_pstdev(file_names):
             avg_cost = 0
             avg_duration = 0
             avg_replans = 0
-            
+            print("=================== FILE: ====================== ")
+            print(file)
+            print("=================== ======== ====================== ")
             success_ratio = 0
             with open(file, "r") as f:
                 lines = f.readlines()
@@ -32,7 +34,10 @@ def calculate_pstdev(file_names):
                             d = int(i.split(' ')[2])
                                 
                             total_duration.append(d)
-                temp = lines[-1].split(', ')
+                for i in range(len(lines)-1, -1, -1):
+                    if lines[i] != "\n":
+                        temp = lines[i].split(', ')
+                        break
                 num_iteration = temp[0].split(':')[2]
                 avg_cost = temp[1].split(' ')[1]
                 avg_duration = temp[2].split(' ')[1]
@@ -92,13 +97,17 @@ def calculate_map_to_map_pstdev(file_names):
         print("avg_durations_of_instances: ", avg_durations_of_instances)
         print("pstdev_over_averages: ", pstdev_over_averages)
         print("===============================================================\n\n")
-        with open("results/Map_Summary_" + file_name + ".csv", "w") as f:
+        with open("MapSummary/" + file_name + ".csv", "w") as f:
             f.write("avg_of_avg_durations: {}, pstdev_of_avgs_durations: {}\n avg_of_ pstdev/avg: {}, pstdev_of_pstdev/avg: {}\n".format(
                 statistics.mean(avg_durations_of_instances), 
                 statistics.pstdev(avg_durations_of_instances), 
                 statistics.mean(pstdev_over_averages), 
                 statistics.pstdev(pstdev_over_averages)))
         f.close()
-file_names = ["Berlin_1_256_even", "empty_8_8_even"]
+
+file_names = [ "empty_8_8_even", "maze_32_32_4_even", "maze_32_32_4_random", "empty_8_8_random", "empty_48_48_even", 
+"empty_48_48_random", "maze_32_32_2_even", "maze_32_32_2_random", "empty_16_16_even", "empty_16_16_random", "empty_32_32_even", "empty_32_32_random", 
+"warehouse_10_20_10_2_1_even", "warehouse_10_20_10_2_1_random", "warehouse_10_20_10_2_2_even", "warehouse_10_20_10_2_2_random", "warehouse_20_40_10_2_1_even", "warehouse_20_40_10_2_2_random", "maze_128_128_10_even" ]
+
 calculate_pstdev(file_names)
 calculate_map_to_map_pstdev(file_names)

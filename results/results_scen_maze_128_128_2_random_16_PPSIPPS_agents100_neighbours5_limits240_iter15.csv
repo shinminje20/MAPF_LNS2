@@ -1,0 +1,19 @@
+Start file: scen/maze-128-128-2-random-16.scen,
+iteration: 0, cost: 66918, duration: 171472538024, num_raplans: 18
+iteration: 1, cost: 66473, duration: 138808134295, num_raplans: 13
+iteration: 2, cost: 66915, duration: 132717918594, num_raplans: 11
+iteration: 3, cost: 66874, duration: 174278671537, num_raplans: 19
+iteration: 4, cost: 67150, duration: 163933361499, num_raplans: 18
+iteration: 5, cost: 65735, duration: 125550220603, num_raplans: 11
+iteration: 6, cost: 67475, duration: 180658169559, num_raplans: 21
+iteration: 7, cost: 67181, duration: 132160227862, num_raplans: 12
+iteration: 8, cost: 66999, duration: 163467968609, num_raplans: 16
+iteration: 9, cost: 65801, duration: 130537633170, num_raplans: 13
+iteration: 10, cost: 66210, duration: 155952955074, num_raplans: 15
+iteration: 11, cost: 66923, duration: 133767487941, num_raplans: 11
+iteration: 12, cost: 64638, duration: 110403515520, num_raplans: 9
+iteration: 13, cost: 66447, duration: 127744654055, num_raplans: 11
+iteration: 14, cost: 65738, duration: 171933527064, num_raplans: 17
+Instance summary: num_iteration:15, avg_cost: 66498.46666666666, avg_duration: 147559132227.06668, avg_replans: 14, std_duration: 22101323794.839367, success_ratio: 100.0%
+
+

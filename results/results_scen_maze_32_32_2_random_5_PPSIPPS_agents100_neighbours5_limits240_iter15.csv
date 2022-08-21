@@ -1,0 +1,23 @@
+Start file: scen/maze-32-32-2-random-5.scen,
+iteration: 0, cost: 8864, duration: 14239603306, num_raplans: 14
+iteration: 1, cost: 8294, duration: 19178456063, num_raplans: 22
+iteration: 2, cost: 9055, duration: 13338690696, num_raplans: 13
+iteration: 3, cost: 8748, duration: 22262967725, num_raplans: 27
+iteration: 4, cost: 8620, duration: 12362561402, num_raplans: 13
+iteration: 5, cost: 8861, duration: 19944269076, num_raplans: 22
+iteration: 6, cost: 8829, duration: 12922789352, num_raplans: 16
+iteration: 7, cost: 8303, duration: 14600749785, num_raplans: 18
+iteration: 8, cost: 8161, duration: 11648370466, num_raplans: 13
+iteration: 9, cost: 8906, duration: 19775015549, num_raplans: 21
+iteration: 10, cost: 8566, duration: 14142258792, num_raplans: 13
+iteration: 11, cost: 8658, duration: 14269480411, num_raplans: 15
+iteration: 12, cost: 9282, duration: 21456288830, num_raplans: 28
+iteration: 13, cost: 8083, duration: 14435729755, num_raplans: 16
+iteration: 14, cost: 8687, duration: 17205242254, num_raplans: 18
+Instance summary: num_iteration:15, avg_cost: 8661.133333333333, avg_duration: 16118831564.133333, avg_replans: 17, std_duration: 3513406999.8501234, success_ratio: 100.0%
+
+Instance_summary: num_iteration: 15, avg_cost: 8661.133333333333, avg_duration: 16118831564.133333, avg_replans: 17, pstd_duration: 3394273633.168485, success_ratio: 100.0%
+Instance_summary: num_iteration:  15, avg_cost: 8661.133333333333, avg_duration: 16118831564.133333, avg_replans: 17, pstd_duration: 3394273633.168485, success_ratio: 100.0%
+Instance_summary: num_iteration:   15, avg_cost: 8661.133333333333, avg_duration: 16118831564.133333, avg_replans: 17, pstd_duration: 3394273633.168485, success_ratio: 100.0%
+Instance_summary: num_iteration:    15, avg_cost: 8661.133333333333, avg_duration: 16118831564.133333, avg_replans: 17, pstd_duration: 3394273633.168485, success_ratio: 100.0%
+

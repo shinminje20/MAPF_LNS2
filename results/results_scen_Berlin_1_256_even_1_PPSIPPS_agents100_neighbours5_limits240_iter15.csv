@@ -1,0 +1,19 @@
+Start file: scen/Berlin_1_256-even-1.scen,
+iteration: 0, cost: 20944, duration: 141140128378, num_raplans: 18
+iteration: 1, cost: 20784, duration: 124913243835, num_raplans: 13
+iteration: 2, cost: 20392, duration: 118613161777, num_raplans: 14
+iteration: 3, cost: 20122, duration: 82401909423, num_raplans: 7
+iteration: 4, cost: 20679, duration: 100416986303, num_raplans: 10
+iteration: 5, cost: 20722, duration: 88938773074, num_raplans: 7
+iteration: 6, cost: 20432, duration: 117864366803, num_raplans: 13
+iteration: 7, cost: 20153, duration: 89652526335, num_raplans: 9
+iteration: 8, cost: 21022, duration: 101961552012, num_raplans: 10
+iteration: 9, cost: 20631, duration: 86097161228, num_raplans: 7
+iteration: 10, cost: 20204, duration: 82087370127, num_raplans: 6
+iteration: 11, cost: 20684, duration: 129923809706, num_raplans: 17
+iteration: 12, cost: 19997, duration: 85574970750, num_raplans: 8
+iteration: 13, cost: 20616, duration: 122997248017, num_raplans: 14
+iteration: 14, cost: 20658, duration: 103698292972, num_raplans: 11
+Instance summary: num_iteration:15, avg_cost: 20536, avg_duration: 105085433382.66667, avg_replans: 10, std_duration: 19446251879.264755, success_ratio: 100.0%
+
+
