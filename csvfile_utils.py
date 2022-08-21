@@ -6,8 +6,8 @@ import fileinput
 import sys
 import glob
 
-def calculate_pstdev():
-    file_names = ["Berlin_1_256_even", "Berlin_1_256_random"]
+def calculate_pstdev(file_names):
+    
 
 
     for file_name in file_names:
@@ -52,8 +52,7 @@ def calculate_pstdev():
             a_file.writelines(list_of_lines)
             a_file.close()
         
-def calculate_map_to_map_pstdev():
-    file_names = ["Berlin_1_256_even", "Berlin_1_256_random"]
+def calculate_map_to_map_pstdev(file_names):
 
 
     for file_name in file_names:
@@ -61,9 +60,9 @@ def calculate_map_to_map_pstdev():
         files = glob.glob("results/results_scen_"+ file_name + "*")
         print("files: ", files)
 
-        pstdev_of_instances = []
-        total_durations_of_instances = []
         avg_durations_of_instances = []
+        pstdev_over_averages = []
+
         for file in files:
             
             with open(file, "r") as f:
@@ -76,28 +75,30 @@ def calculate_map_to_map_pstdev():
                             d = int(i.split(' ')[2])
                                 
                             total_duration.append(d)
-                temp = lines[-1].split(', ')
+                for i in range(len(lines)-1, -1, -1):
+                    if lines[i] != "\n":
+                        temp = lines[i].split(', ')
+                        break
                 avg_duration = temp[2].split(' ')[1]
-                avg_durations_of_instances.append(float(avg_duration))
-                total_durations_of_instances += total_duration
-                pstdev = statistics.pstdev(total_duration)
-                print("pstdev: ", pstdev)
-            f.close()
-
-
-            with open(file, "r") as f:
-                lines = f.readlines()
-                temp = lines[-1].split(', ')
+                # print(" temp[4].split(' '): ",  temp[4].split(' '))
                 pstdev = temp[4].split(' ')[1]
-                pstdev_of_instances.append(float(pstdev))
-                print("pstdev: ", pstdev)
+                
+                
+                avg_durations_of_instances.append(float(avg_duration))
+                pstdev_over_averages.append(float(pstdev)/float(avg_duration))
+                
             f.close()
-        print("total_durations_of_instances: ", total_durations_of_instances)
-        print("pstdev_of_instances: ", pstdev_of_instances)
+
         print("avg_durations_of_instances: ", avg_durations_of_instances)
+        print("pstdev_over_averages: ", pstdev_over_averages)
         print("===============================================================\n\n")
         with open("results/Map_Summary_" + file_name + ".csv", "w") as f:
-            f.write("pstdev_of_instances: {}, pstdev_of_avgs\n".format(statistics.pstdev(total_durations_of_instances), statistics.pstdev(avg_durations_of_instances)))
+            f.write("avg_of_avg_durations: {}, pstdev_of_avgs_durations: {}\n avg_of_ pstdev/avg: {}, pstdev_of_pstdev/avg: {}\n".format(
+                statistics.mean(avg_durations_of_instances), 
+                statistics.pstdev(avg_durations_of_instances), 
+                statistics.mean(pstdev_over_averages), 
+                statistics.pstdev(pstdev_over_averages)))
         f.close()
-# calculate_pstdev()
-calculate_map_to_map_pstdev()
+file_names = ["Berlin_1_256_even", "empty_8_8_even"]
+calculate_pstdev(file_names)
+calculate_map_to_map_pstdev(file_names)
